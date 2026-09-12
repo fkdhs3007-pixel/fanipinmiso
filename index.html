@@ -24,15 +24,15 @@ text-size-adjust: 100% !important;
 
 body {
 background-color: var(--bg-color);
-padding: 4px;
-max-width: 600px;
+padding: 7px 4px;
+max-width: 440px;
 margin: 0 auto;
 }
 
 .card-container {
 background: #ffffff;
 border: 2px solid var(--border-color);
-padding: 8px 4px 6px 4px;
+padding: 9px 5px 7px 5px;
 border-radius: 6px;
 position: relative;
 width: 100%;
@@ -49,14 +49,14 @@ padding: 6px;
 font-size: 13px;
 font-weight: bold;
 border-radius: 4px;
-margin-bottom: 8px;
+margin-bottom: 6px;
 }
 
 h1 {
 text-align: center;
-font-size: 19px;
+font-size: 21px;
 font-weight: bold;
-margin-bottom: 6px;
+margin-bottom: 8px;
 line-height: 1.2;
 }
 
@@ -64,51 +64,61 @@ line-height: 1.2;
 display: flex !important;
 justify-content: space-between !important;
 align-items: center !important;
-font-size: 12px;
+font-size: 13px;
 font-weight: bold;
 color: #333;
 margin-bottom: 8px;
 padding: 0 2px;
 width: 100%;
 box-sizing: border-box;
-gap: 2px;
+gap: 4px;
 }
 
 .info-item {
 display: flex;
 align-items: center;
 white-space: nowrap;
+height: 24px;
+}
+
+.info-item.flex-grow {
+flex: 1;
+min-width: 0;
 }
 
 .info-item label {
 white-space: nowrap !important;
 margin-right: 2px;
 flex-shrink: 0;
+font-size: 13px;
+line-height: 24px;
 }
 
 .info-input, .info-select {
 border: none !important;
 border-bottom: 1px solid #999 !important;
 background: transparent !important;
-font-size: 12px !important;
+font-size: 13px !important;
 font-weight: bold !important;
 color: #333 !important;
 outline: none !important;
 padding: 0 1px !important;
-height: 20px !important;
-line-height: 20px !important;
+height: 22px !important;
+line-height: 22px !important;
 }
 
 #course-name {
-width: 75px !important;
+width: 100% !important;
+min-width: 50px !important;
 text-align: left !important;
 }
 
 #course-select {
-width: 58px !important;
+width: 50px !important;
 text-align: center !important;
 cursor: pointer;
 padding: 0 !important;
+flex-shrink: 0;
 }
 
 #course-name::placeholder {
@@ -117,7 +127,8 @@ font-weight: normal;
 }
 
 #game-date {
-width: 70px !important;
+width: 100% !important;
+min-width: 65px !important;
 text-align: right !important;
 }
 
@@ -131,13 +142,13 @@ width: 100%;
 table-layout: fixed;
 border-collapse: collapse;
 text-align: center;
-font-size: 12px;
+font-size: 13px;
 }
 
 th, td {
 border: 1px solid var(--border-color);
 padding: 0;
-height: 28px;
+height: 34px;
 vertical-align: middle;
 word-break: keep-all;
 }
@@ -148,32 +159,46 @@ font-weight: bold;
 }
 
 .th-hole-header {
-font-size: 11px;
-line-height: 1.15;
+font-size: 12px;
+line-height: 1.1;
 }
 
 .th-sub-text {
-font-size: 8px;
+font-size: 9px;
 font-weight: bold;
 color: #555;
 display: block;
 margin-top: 1px;
 }
 
-input[type="number"], input[type="text"] {
+/* 일반 타수 및 선수명 입력창 */
+input[type="number"]:not(.par-val), input[type="text"] {
 width: 100%;
 height: 100%;
 border: none;
 text-align: center;
-font-size: 12px;
+font-size: 13px;
 background: transparent;
 outline: none;
 padding: 0;
 }
 
-/* 각 코스 타수 입력란 숫자 전용 크기 (15px) */
+/* PAR 입력 필드 */
+input.par-val {
+width: 100%;
+height: 100%;
+border: none;
+text-align: center;
+font-size: 13px;
+font-weight: bold;
+color: #333 !important;
+-webkit-text-fill-color: #333 !important;
+outline: none;
+padding: 0;
+}
+
 .score-input {
-font-size: 15px !important;
+font-size: 17px !important;
 font-weight: bold !important;
 }
 
@@ -193,25 +218,24 @@ background-color: #f5f9fd !important;
 
 input:disabled, select:disabled {
 opacity: 1 !important;
-background-color: transparent !important;
 }
 
 input[type="number"]:focus {
-background-color: #e8f0fe;
+background-color: #e8f0fe !important;
 }
 
-/* 홀인원 강제 빨간색 적용 */
 input[type="number"].hole-in-one,
 input.score-a.hole-in-one,
 input.score-b.hole-in-one {
 color: #d32f2f !important;
 -webkit-text-fill-color: #d32f2f !important;
 font-weight: 900 !important;
+font-size: 18px !important;
 }
 
 .player-name-input {
 font-weight: bold !important;
-font-size: 12px;
+font-size: 13px;
 }
 
 .player-name-input::placeholder {
@@ -220,27 +244,21 @@ font-weight: normal;
 }
 
 .sub-header {
-font-size: 11px;
+font-size: 12px;
 font-weight: bold;
 color: #333;
 background-color: #fafafa;
 }
 
-.par-val {
-font-weight: bold;
-color: #333 !important;
--webkit-text-fill-color: #333 !important;
-}
-
 .sum-9-row {
 background-color: #f8f9fa;
-height: 32px !important;
+height: 36px !important;
 }
 
 .sum-9-row td {
-height: 32px !important;
-line-height: 32px;
-font-size: 12px !important;
+height: 36px !important;
+line-height: 36px;
+font-size: 13px !important;
 font-weight: bold !important;
 }
 
@@ -248,19 +266,18 @@ font-weight: bold !important;
 background-color: #fff5f5;
 font-weight: bold;
 color: #d32f2f;
-height: 34px !important;
+height: 38px !important;
 }
 
 .sum-total-row td {
-font-size: 12px !important;
+font-size: 13px !important;
 font-weight: 800;
-height: 34px !important;
-line-height: 34px;
+height: 38px !important;
+line-height: 38px;
 }
 
-/* 9홀, 18홀 합계 숫자 전용 크기 (14px) */
 td.sum-val {
-font-size: 14px !important;
+font-size: 15px !important;
 font-weight: bold !important;
 }
 
@@ -268,19 +285,18 @@ font-weight: bold !important;
 background-color: #fffde7;
 font-weight: bold;
 color: #333;
-height: 28px !important;
+height: 34px !important;
 }
 
 .rank-row td {
-font-size: 12px !important;
+font-size: 13px !important;
 font-weight: bold;
-height: 28px !important;
-line-height: 28px;
+height: 34px !important;
+line-height: 34px;
 }
 
-/* 순위 숫자 전용 크기 (14px) */
 td.rank-val {
-font-size: 14px !important;
+font-size: 15px !important;
 font-weight: bold !important;
 }
 
@@ -295,7 +311,7 @@ z-index: 999;
 
 .btn {
 flex: 1;
-padding: 12px 4px;
+padding: 11px 2px;
 border: 1px solid #ccc;
 border-radius: 6px;
 background-color: #ffffff;
@@ -345,7 +361,7 @@ margin: 0;
 <h1>파크골프 스코어카드</h1>
 
 <div class="info-area">
-<div class="info-item">
+<div class="info-item flex-grow">
 <label for="course-name">⛳ 구장:</label>
 <input type="text" id="course-name" class="info-input" placeholder="파크골프장명" oninput="saveData()">
 </div>
@@ -358,7 +374,7 @@ margin: 0;
 <option value="G-H">G-H</option>
 </select>
 </div>
-<div class="info-item">
+<div class="info-item flex-grow" style="justify-content: flex-end;">
 <label for="game-date">📅 날짜:</label>
 <input type="text" id="game-date" class="info-input" oninput="saveData()">
 </div>
@@ -367,17 +383,17 @@ margin: 0;
 <div class="table-wrapper">
 <table>
 <colgroup>
-<col style="width: 8%;">
+<col style="width: 8.5%;">
 <col style="width: 6.5%;">
 <col style="width: 6.5%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
-<col style="width: 9.75%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
+<col style="width: 9.8%;">
 </colgroup>
 <thead>
 <tr>
@@ -401,8 +417,8 @@ margin: 0;
 for (var h = 1; h <= 9; h++) {
 document.write('<tr>');
 document.write('<td><b>' + h + '</b></td>');
-document.write('<td><input type="number" class="par-val par-a" oninput="onInputChange()"></td>');
-document.write('<td class="b-course-bg"><input type="number" class="par-val par-b" oninput="onInputChange()"></td>');
+document.write('<td style="background-color: #f5faf5 !important;"><input type="number" class="par-val par-a" style="background-color: #f5faf5 !important;" oninput="onInputChange()"></td>');
+document.write('<td style="background-color: #fff6f8 !important;"><input type="number" class="par-val par-b" style="background-color: #fff6f8 !important;" oninput="onInputChange()"></td>');
 for (var p = 1; p <= 4; p++) {
 document.write('<td><input type="number" class="p' + p + 'a score-a score-input" oninput="onInputChange()" onkeyup="onInputChange()" onchange="onInputChange()"></td>');
 document.write('<td class="b-course-bg"><input type="number" class="p' + p + 'b score-b score-input" oninput="onInputChange()" onkeyup="onInputChange()" onchange="onInputChange()"></td>');
@@ -531,7 +547,6 @@ scores.push(isNaN(v) ? 0 : v);
 return scores;
 }
 
-/* 홀인원 검사 및 스타일 지정 */
 function checkHoleInOneColor() {
 var numInputs = document.querySelectorAll('input[type="number"]:not(.par-val)');
 for (var i = 0; i < numInputs.length; i++) {
@@ -666,15 +681,26 @@ useCORS: true,
 logging: false,
 onclone: function(clonedDoc) {
 var clonedCard = clonedDoc.getElementById('capture-area');
-clonedCard.style.width = '360px';
+clonedCard.style.width = '380px';
+clonedCard.style.padding = '6px 5px 5px 5px';
 
 var styleEl = clonedDoc.createElement('style');
-styleEl.innerHTML = "#capture-area * { font-size: 12px !important; line-height: 1.2 !important; } #capture-area h1 { font-size: 18px !important; } #capture-area .th-hole-header { font-size: 11px !important; line-height: 1.1 !important; } #capture-area .th-sub-text { font-size: 8px !important; } #capture-area td, #capture-area th { height: 28px !important; line-height: 28px !important; } #capture-area .score-span { font-size: 15px !important; font-weight: bold !important; } #capture-area .sum-val, #capture-area .rank-val { font-size: 14px !important; font-weight: bold !important; }";
+styleEl.innerHTML = "#capture-area * { font-size: 13px !important; line-height: 1.15 !important; } " +
+"#capture-area h1 { font-size: 19px !important; margin-bottom: 5px !important; } " +
+"#capture-area .info-area { margin-bottom: 5px !important; font-size: 13px !important; } " +
+"#capture-area .th-hole-header { font-size: 12px !important; line-height: 1.0 !important; } " +
+"#capture-area .th-sub-text { font-size: 9px !important; } " +
+"#capture-area td, #capture-area th { height: 28px !important; line-height: 28px !important; } " +
+"#capture-area .sum-9-row td { height: 30px !important; line-height: 30px !important; font-size: 13px !important; } " +
+"#capture-area .sum-total-row td { height: 32px !important; line-height: 32px !important; font-size: 13px !important; } " +
+"#capture-area .rank-row td { height: 28px !important; line-height: 28px !important; font-size: 13px !important; } " +
+"#capture-area .score-span { font-size: 16px !important; font-weight: bold !important; } " +
+"#capture-area .sum-val, #capture-area .rank-val { font-size: 15px !important; font-weight: bold !important; }";
 clonedDoc.head.appendChild(styleEl);
 
 var holeHeader = clonedDoc.getElementById('th-hole-box');
 if (holeHeader) {
-holeHeader.innerHTML = '홀<br><span style="font-size: 8px; font-weight: bold; color: #555; display: inline-block; transform: scale(0.9); margin-top: 1px;">NO</span>';
+holeHeader.innerHTML = '홀<br><span style="font-size: 9px; font-weight: bold; color: #555; display: inline-block; transform: scale(0.9); margin-top: 1px;">NO</span>';
 }
 
 var courseInput = clonedDoc.getElementById('course-name');
@@ -682,15 +708,15 @@ var dateInput = clonedDoc.getElementById('game-date');
 var courseSelect = clonedDoc.getElementById('course-select');
 
 var courseVal = courseInput.value || courseInput.placeholder || '';
-var dateVal = dateInput.value || '';
+var dateVal = dateInput.value || getTodayDateString();
 var selectVal = courseSelect.value;
 
 var courseSpan = clonedDoc.createElement('span');
 courseSpan.style.display = 'inline-block';
-courseSpan.style.width = '80px';
+courseSpan.style.width = '100%';
 courseSpan.style.textAlign = 'left';
 courseSpan.style.borderBottom = '1px solid #999';
-courseSpan.style.fontSize = '12px';
+courseSpan.style.fontSize = '13px';
 courseSpan.style.fontWeight = 'bold';
 courseSpan.style.color = '#333';
 courseSpan.style.padding = '0 1px';
@@ -703,7 +729,7 @@ selectSpan.style.display = 'inline-block';
 selectSpan.style.width = '45px';
 selectSpan.style.textAlign = 'center';
 selectSpan.style.borderBottom = '1px solid #999';
-selectSpan.style.fontSize = '12px';
+selectSpan.style.fontSize = '13px';
 selectSpan.style.fontWeight = 'bold';
 selectSpan.style.color = '#333';
 selectSpan.style.padding = '0 1px';
@@ -713,10 +739,10 @@ selectSpan.innerText = selectVal;
 
 var dateSpan = clonedDoc.createElement('span');
 dateSpan.style.display = 'inline-block';
-dateSpan.style.width = '65px';
+dateSpan.style.width = '100%';
 dateSpan.style.textAlign = 'right';
 dateSpan.style.borderBottom = '1px solid #999';
-dateSpan.style.fontSize = '12px';
+dateSpan.style.fontSize = '13px';
 dateSpan.style.fontWeight = 'bold';
 dateSpan.style.color = '#333';
 dateSpan.style.padding = '0 1px';
@@ -743,20 +769,21 @@ span.style.height = '100%';
 if (input.classList.contains('player-name-input')) {
 span.innerText = val || placeholder;
 span.style.fontWeight = 'bold';
-span.style.fontSize = '12px';
+span.style.fontSize = '13px';
 span.style.color = val ? '#333' : '#a0a0a0';
 } else {
 span.innerText = val;
 if (input.classList.contains('score-input')) {
 span.classList.add('score-span');
-span.style.fontSize = '15px';
+span.style.fontSize = '16px';
 } else {
-span.style.fontSize = '12px';
+span.style.fontSize = '13px';
 }
 
-if (input.classList.contains('hole-in-one') || val === '1') {
+if (input.classList.contains('score-input') && (input.classList.contains('hole-in-one') || val === '1')) {
 span.style.color = '#d32f2f';
 span.style.fontWeight = 'bold';
+span.style.fontSize = '17px';
 } else if (input.classList.contains('score-a')) {
 span.style.color = '#3E7F3A';
 span.style.fontWeight = 'bold';
