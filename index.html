@@ -11,7 +11,7 @@
 --bg-color: #f8f9fa;
 }
 
-• {
+* {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
@@ -171,7 +171,6 @@ display: block;
 margin-top: 1px;
 }
 
-/* 일반 타수 및 선수명 입력창 */
 input[type="number"]:not(.par-val), input[type="text"] {
 width: 100%;
 height: 100%;
@@ -183,7 +182,6 @@ outline: none;
 padding: 0;
 }
 
-/* PAR 입력 필드 */
 input.par-val {
 width: 100%;
 height: 100%;
@@ -669,6 +667,11 @@ calc();
 }
 
 function saveAsImage() {
+var saveBtn = document.getElementById('btn-save');
+saveBtn.innerText = '⏳ 저장 처리중...';
+saveBtn.disabled = true;
+
+setTimeout(function() {
 var area = document.getElementById('capture-area');
 var courseName = document.getElementById('course-name').value.trim();
 var courseType = document.getElementById('course-select').value;
@@ -690,10 +693,10 @@ styleEl.innerHTML = "#capture-area * { font-size: 13px !important; line-height: 
 "#capture-area .info-area { margin-bottom: 4px !important; font-size: 13px !important; } " +
 "#capture-area .th-hole-header { font-size: 12px !important; line-height: 1.0 !important; } " +
 "#capture-area .th-sub-text { font-size: 9px !important; } " +
-"#capture-area td, #capture-area th { height: 26px !important; line-height: 26px !important; } " +
-"#capture-area .sum-9-row td { height: 28px !important; line-height: 28px !important; font-size: 13px !important; } " +
-"#capture-area .sum-total-row td { height: 29px !important; line-height: 29px !important; font-size: 13px !important; } " +
-"#capture-area .rank-row td { height: 26px !important; line-height: 26px !important; font-size: 13px !important; } " +
+"#capture-area td, #capture-area th { height: 27px !important; line-height: 27px !important; } " +
+"#capture-area .sum-9-row td { height: 29px !important; line-height: 29px !important; font-size: 13px !important; } " +
+"#capture-area .sum-total-row td { height: 30px !important; line-height: 30px !important; font-size: 13px !important; } " +
+"#capture-area .rank-row td { height: 27px !important; line-height: 27px !important; font-size: 13px !important; } " +
 "#capture-area .score-span { font-size: 16px !important; font-weight: bold !important; } " +
 "#capture-area .sum-val, #capture-area .rank-val { font-size: 15px !important; font-weight: bold !important; }";
 clonedDoc.head.appendChild(styleEl);
@@ -808,9 +811,16 @@ var dateStr = today.getFullYear() + '-' +
 link.download = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.jpg';
 link.href = canvas.toDataURL('image/jpeg', 0.95);
 link.click();
+
+saveBtn.innerText = '📸 사진으로 저장';
+saveBtn.disabled = false;
+alert("이미지 저장이 완료되었습니다!\n(갤러리 또는 다운로드 폴더를 확인해주세요)");
 }).catch(function(err) {
+saveBtn.innerText = '📸 사진으로 저장';
+saveBtn.disabled = false;
 alert('이미지 저장 중 오류가 발생했습니다: ' + err);
 });
+}, 100);
 }
 
 function resetForm() {
@@ -840,4 +850,3 @@ saveData();
 
 </body>
 </html>
-
