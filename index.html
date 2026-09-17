@@ -460,7 +460,7 @@ document.write('</tr>');
 
 <script>
 var isLocked = false;
-var isSaving = false; // 중복 다운로드 방지 플래그
+var isSaving = false;
 var TOTAL_PLAYERS = 4;
 var COURSES = ['a', 'b'];
 
@@ -668,11 +668,10 @@ calc();
 }
 
 function saveAsImage() {
-if (isSaving) return; // 이미 실행 중이면 추가 작동 차단
+if (isSaving) return;
 isSaving = true;
 
 var saveBtn = document.getElementById('btn-save');
-saveBtn.innerText = '⏳ 저장 처리중...';
 saveBtn.disabled = true;
 
 var area = document.getElementById('capture-area');
@@ -813,13 +812,13 @@ var dateStr = today.getFullYear() + '-' +
 
 link.download = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.jpg';
 link.href = canvas.toDataURL('image/jpeg', 0.95);
+document.body.appendChild(link);
 link.click();
+document.body.removeChild(link);
 
-saveBtn.innerText = '📸 사진으로 저장';
 saveBtn.disabled = false;
 isSaving = false;
 }).catch(function(err) {
-saveBtn.innerText = '📸 사진으로 저장';
 saveBtn.disabled = false;
 isSaving = false;
 alert('이미지 저장 중 오류가 발생했습니다: ' + err);
