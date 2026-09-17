@@ -460,6 +460,7 @@ document.write('</tr>');
 
 <script>
 var isLocked = false;
+var isSaving = false; // 중복 다운로드 방지 플래그
 var TOTAL_PLAYERS = 4;
 var COURSES = ['a', 'b'];
 
@@ -667,11 +668,13 @@ calc();
 }
 
 function saveAsImage() {
+if (isSaving) return; // 이미 실행 중이면 추가 작동 차단
+isSaving = true;
+
 var saveBtn = document.getElementById('btn-save');
 saveBtn.innerText = '⏳ 저장 처리중...';
 saveBtn.disabled = true;
 
-setTimeout(function() {
 var area = document.getElementById('capture-area');
 var courseName = document.getElementById('course-name').value.trim();
 var courseType = document.getElementById('course-select').value;
@@ -814,13 +817,13 @@ link.click();
 
 saveBtn.innerText = '📸 사진으로 저장';
 saveBtn.disabled = false;
-alert("이미지 저장이 완료되었습니다!\n(갤러리 또는 다운로드 폴더를 확인해주세요)");
+isSaving = false;
 }).catch(function(err) {
 saveBtn.innerText = '📸 사진으로 저장';
 saveBtn.disabled = false;
+isSaving = false;
 alert('이미지 저장 중 오류가 발생했습니다: ' + err);
 });
-}, 100);
 }
 
 function resetForm() {
