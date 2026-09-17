@@ -7,846 +7,835 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
---border-color: #333333;
---bg-color: #f8f9fa;
+  --border-color: #333333;
+  --bg-color: #f8f9fa;
 }
 
 * {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif !important;
--webkit-text-size-adjust: 100% !important;
--moz-text-size-adjust: 100% !important;
--ms-text-size-adjust: 100% !important;
-text-size-adjust: 100% !important;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif !important;
+  -webkit-text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+  -ms-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
 body {
-background-color: var(--bg-color);
-padding: 5px 4px;
-max-width: 440px;
-margin: 0 auto;
+  background-color: var(--bg-color);
+  padding: 5px 4px;
+  max-width: 440px;
+  margin: 0 auto;
 }
 
 .card-container {
-background: #ffffff;
-border: 2px solid var(--border-color);
-padding: 7px 5px 5px 5px;
-border-radius: 6px;
-position: relative;
-width: 100%;
-box-sizing: border-box;
+  background: #ffffff;
+  border: 2px solid var(--border-color);
+  padding: 7px 5px 5px 5px;
+  border-radius: 6px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .lock-banner {
-display: none;
-background-color: #fff3cd;
-color: #856404;
-border: 1px solid #ffeeba;
-text-align: center;
-padding: 4px;
-font-size: 13px;
-font-weight: bold;
-border-radius: 4px;
-margin-bottom: 5px;
+  display: none;
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  text-align: center;
+  padding: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-bottom: 4px;
 }
 
 h1 {
-text-align: center;
-font-size: 21px;
-font-weight: bold;
-margin-bottom: 6px;
-line-height: 1.2;
+  text-align: center;
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  line-height: 1.1;
 }
 
 .info-area {
-display: flex !important;
-justify-content: space-between !important;
-align-items: center !important;
-font-size: 13px;
-font-weight: bold;
-color: #333;
-margin-bottom: 6px;
-padding: 0 2px;
-width: 100%;
-box-sizing: border-box;
-gap: 4px;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6px;
+  padding: 0 2px;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 4px;
 }
 
 .info-item {
-display: flex;
-align-items: center;
-white-space: nowrap;
-height: 22px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  height: 22px;
 }
 
 .info-item.flex-grow {
-flex: 1;
-min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .info-item label {
-white-space: nowrap !important;
-margin-right: 2px;
-flex-shrink: 0;
-font-size: 13px;
-line-height: 22px;
+  white-space: nowrap !important;
+  margin-right: 2px;
+  flex-shrink: 0;
+  font-size: 13px;
+  line-height: 22px;
 }
 
 .info-input, .info-select {
-border: none !important;
-border-bottom: 1px solid #999 !important;
-background: transparent !important;
-font-size: 13px !important;
-font-weight: bold !important;
-color: #333 !important;
-outline: none !important;
-padding: 0 1px !important;
-height: 20px !important;
-line-height: 20px !important;
+  border: none !important;
+  border-bottom: 1px solid #999 !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  font-weight: bold !important;
+  color: #333 !important;
+  outline: none !important;
+  padding: 0 1px !important;
+  height: 20px !important;
+  line-height: 20px !important;
 }
 
 #course-name {
-width: 100% !important;
-min-width: 50px !important;
-text-align: left !important;
+  width: 100% !important;
+  min-width: 50px !important;
+  text-align: left !important;
 }
 
 #course-select {
-width: 50px !important;
-text-align: center !important;
-cursor: pointer;
-padding: 0 !important;
-flex-shrink: 0;
+  width: 50px !important;
+  text-align: center !important;
+  cursor: pointer;
+  padding: 0 !important;
+  flex-shrink: 0;
 }
 
 #course-name::placeholder {
-color: #b0b0b0;
-font-weight: normal;
+  color: #b0b0b0;
+  font-weight: normal;
 }
 
 #game-date {
-width: 100% !important;
-min-width: 65px !important;
-text-align: right !important;
+  width: 100% !important;
+  min-width: 65px !important;
+  text-align: right !important;
 }
 
 .table-wrapper {
-overflow-x: hidden;
-width: 100%;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 table {
-width: 100%;
-table-layout: fixed;
-border-collapse: collapse;
-text-align: center;
-font-size: 13px;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 13px;
 }
 
 th, td {
-border: 1px solid var(--border-color);
-padding: 0;
-height: 32px;
-vertical-align: middle;
-word-break: keep-all;
+  border: 1px solid var(--border-color);
+  padding: 0;
+  height: 32px;
+  vertical-align: middle;
+  word-break: keep-all;
 }
 
 th {
-background-color: #f1f3f5;
-font-weight: bold;
+  background-color: #f1f3f5;
+  font-weight: bold;
 }
 
 .th-hole-header {
-font-size: 12px;
-line-height: 1.1;
+  font-size: 12px;
+  line-height: 1.1;
 }
 
 .th-sub-text {
-font-size: 9px;
-font-weight: bold;
-color: #555;
-display: block;
-margin-top: 1px;
+  font-size: 9px;
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-top: 1px;
 }
 
+/* 일반 타수 및 선수명 입력창 */
 input[type="number"]:not(.par-val), input[type="text"] {
-width: 100%;
-height: 100%;
-border: none;
-text-align: center;
-font-size: 13px;
-background: transparent;
-outline: none;
-padding: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-size: 13px;
+  background: transparent;
+  outline: none;
+  padding: 0;
 }
 
+/* PAR 입력 필드 */
 input.par-val {
-width: 100%;
-height: 100%;
-border: none;
-text-align: center;
-font-size: 13px;
-font-weight: bold;
-color: #333 !important;
--webkit-text-fill-color: #333 !important;
-outline: none;
-padding: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: #333 !important;
+  -webkit-text-fill-color: #333 !important;
+  outline: none;
+  padding: 0;
 }
 
 .score-input {
-font-size: 17px !important;
-font-weight: bold !important;
+  font-size: 17px !important;
+  font-weight: bold !important;
 }
 
 input.score-a {
-color: #3E7F3A !important;
--webkit-text-fill-color: #3E7F3A !important;
+  color: #3E7F3A !important;
+  -webkit-text-fill-color: #3E7F3A !important;
 }
 
 input.score-b {
-color: #7A3DB8 !important;
--webkit-text-fill-color: #7A3DB8 !important;
+  color: #7A3DB8 !important;
+  -webkit-text-fill-color: #7A3DB8 !important;
 }
 
 .b-course-bg {
-background-color: #f5f9fd !important;
+  background-color: #f5f9fd !important;
 }
 
 input:disabled, select:disabled {
-opacity: 1 !important;
+  opacity: 1 !important;
 }
 
 input[type="number"]:focus {
-background-color: #e8f0fe !important;
+  background-color: #e8f0fe !important;
 }
 
 input[type="number"].hole-in-one,
 input.score-a.hole-in-one,
 input.score-b.hole-in-one {
-color: #d32f2f !important;
--webkit-text-fill-color: #d32f2f !important;
-font-weight: 900 !important;
-font-size: 18px !important;
+  color: #d32f2f !important;
+  -webkit-text-fill-color: #d32f2f !important;
+  font-weight: 900 !important;
+  font-size: 18px !important;
 }
 
 .player-name-input {
-font-weight: bold !important;
-font-size: 13px;
+  font-weight: bold !important;
+  font-size: 13px;
 }
 
 .player-name-input::placeholder {
-color: #a0a0a0;
-font-weight: normal;
+  color: #a0a0a0;
+  font-weight: normal;
 }
 
 .sub-header {
-font-size: 12px;
-font-weight: bold;
-color: #333;
-background-color: #fafafa;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  background-color: #fafafa;
 }
 
 .sum-9-row {
-background-color: #f8f9fa;
-height: 33px !important;
+  background-color: #f8f9fa;
+  height: 33px !important;
 }
 
 .sum-9-row td {
-height: 33px !important;
-line-height: 33px;
-font-size: 13px !important;
-font-weight: bold !important;
+  height: 33px !important;
+  line-height: 33px;
+  font-size: 13px !important;
+  font-weight: bold !important;
 }
 
 .sum-total-row {
-background-color: #fff5f5;
-font-weight: bold;
-color: #d32f2f;
-height: 34px !important;
+  background-color: #fff5f5;
+  font-weight: bold;
+  color: #d32f2f;
+  height: 34px !important;
 }
 
 .sum-total-row td {
-font-size: 13px !important;
-font-weight: 800;
-height: 34px !important;
-line-height: 34px;
+  font-size: 13px !important;
+  font-weight: 800;
+  height: 34px !important;
+  line-height: 34px;
 }
 
 td.sum-val {
-font-size: 15px !important;
-font-weight: bold !important;
+  font-size: 15px !important;
+  font-weight: bold !important;
 }
 
 .rank-row {
-background-color: #fffde7;
-font-weight: bold;
-color: #333;
-height: 31px !important;
+  background-color: #fffde7;
+  font-weight: bold;
+  color: #333;
+  height: 31px !important;
 }
 
 .rank-row td {
-font-size: 13px !important;
-font-weight: bold;
-height: 31px !important;
-line-height: 31px;
+  font-size: 13px !important;
+  font-weight: bold;
+  height: 31px !important;
+  line-height: 31px;
 }
 
 td.rank-val {
-font-size: 15px !important;
-font-weight: bold !important;
+  font-size: 15px !important;
+  font-weight: bold !important;
 }
 
 .btn-group {
-margin-top: 8px;
-display: flex;
-gap: 6px;
-flex-wrap: wrap;
-position: relative;
-z-index: 999;
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 999;
 }
 
 .btn {
-flex: 1;
-padding: 10px 2px;
-border: 1px solid #ccc;
-border-radius: 6px;
-background-color: #ffffff;
-font-size: 13px;
-font-weight: bold;
-cursor: pointer;
-white-space: nowrap;
-touch-action: manipulation;
--webkit-tap-highlight-color: transparent;
+  flex: 1;
+  padding: 10px 2px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-lock {
-background-color: #e3f2fd;
-color: #1565c0;
-border-color: #90caf9;
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border-color: #90caf9;
 }
 
 .btn-lock.locked {
-background-color: #fff3e0;
-color: #e65100;
-border-color: #ffcc80;
+  background-color: #fff3e0;
+  color: #e65100;
+  border-color: #ffcc80;
 }
 
 .btn-save {
-background-color: #e8f5e9;
-color: #2e7d32;
-border-color: #a5d6a7;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-color: #a5d6a7;
 }
 
 .btn-reset {
-background-color: #ffebee;
-color: #c62828;
-border-color: #ef9a9a;
+  background-color: #ffebee;
+  color: #c62828;
+  border-color: #ef9a9a;
 }
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>
 </head>
 <body>
 
 <div class="card-container" id="capture-area">
-<div class="lock-banner" id="lock-banner">🔒 현재 스코어카드가 잠겨있습니다. (수정 불가)</div>
-<h1>파크골프 스코어카드</h1>
+  <div class="lock-banner" id="lock-banner">🔒 현재 스코어카드가 잠겨있습니다. (수정 불가)</div>
+  <h1>파크골프 스코어카드</h1>
 
-<div class="info-area">
-<div class="info-item flex-grow">
-<label for="course-name">⛳ 구장:</label>
-<input type="text" id="course-name" class="info-input" placeholder="파크골프장명" oninput="saveData()">
-</div>
-<div class="info-item">
-<label for="course-select">🚩</label>
-<select id="course-select" class="info-select" onchange="updateCourseHeaders(); saveData();">
-<option value="A-B">A-B</option>
-<option value="C-D">C-D</option>
-<option value="E-F">E-F</option>
-<option value="G-H">G-H</option>
-</select>
-</div>
-<div class="info-item flex-grow" style="justify-content: flex-end;">
-<label for="game-date">📅 날짜:</label>
-<input type="text" id="game-date" class="info-input" oninput="saveData()">
-</div>
-</div>
+  <div class="info-area">
+    <div class="info-item flex-grow">
+      <label for="course-name">⛳ 구장:</label>
+      <input type="text" id="course-name" class="info-input" placeholder="파크골프장명" oninput="saveData()">
+    </div>
+    <div class="info-item">
+      <label for="course-select">🚩</label>
+      <select id="course-select" class="info-select" onchange="updateCourseHeaders(); saveData();">
+        <option value="A-B">A-B</option>
+        <option value="C-D">C-D</option>
+        <option value="E-F">E-F</option>
+        <option value="G-H">G-H</option>
+      </select>
+    </div>
+    <div class="info-item flex-grow" style="justify-content: flex-end;">
+      <label for="game-date">📅 날짜:</label>
+      <input type="text" id="game-date" class="info-input" oninput="saveData()">
+    </div>
+  </div>
 
-<div class="table-wrapper">
-<table>
-<colgroup>
-<col style="width: 8.5%;">
-<col style="width: 6.5%;">
-<col style="width: 6.5%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-<col style="width: 9.8%;">
-</colgroup>
-<thead>
-<tr>
-<th class="th-hole-header" id="th-hole-box" rowspan="2">홀<span class="th-sub-text">NO</span></th>
-<th class="th-hole-header" colspan="2">파<span class="th-sub-text">PAR</span></th>
-<th colspan="2"><input type="text" class="player-name-input" id="p1-name" placeholder="이름" oninput="saveData()"></th>
-<th colspan="2"><input type="text" class="player-name-input" id="p2-name" placeholder="이름" oninput="saveData()"></th>
-<th colspan="2"><input type="text" class="player-name-input" id="p3-name" placeholder="이름" oninput="saveData()"></th>
-<th colspan="2"><input type="text" class="player-name-input" id="p4-name" placeholder="이름" oninput="saveData()"></th>
-</tr>
-<tr class="sub-header">
-<th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
-<th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
-<th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
-<th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
-<th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
-</tr>
-</thead>
-<tbody>
-<script>
-for (var h = 1; h <= 9; h++) {
-document.write('<tr>');
-document.write('<td><b>' + h + '</b></td>');
-document.write('<td style="background-color: #f5faf5 !important;"><input type="number" class="par-val par-a" style="background-color: #f5faf5 !important;" oninput="onInputChange()"></td>');
-document.write('<td style="background-color: #fff6f8 !important;"><input type="number" class="par-val par-b" style="background-color: #fff6f8 !important;" oninput="onInputChange()"></td>');
-for (var p = 1; p <= 4; p++) {
-document.write('<td><input type="number" class="p' + p + 'a score-a score-input" oninput="onInputChange()" onkeyup="onInputChange()" onchange="onInputChange()"></td>');
-document.write('<td class="b-course-bg"><input type="number" class="p' + p + 'b score-b score-input" oninput="onInputChange()" onkeyup="onInputChange()" onchange="onInputChange()"></td>');
-}
-document.write('</tr>');
-}
-</script>
-</tbody>
-<tfoot>
-<tr class="sum-9-row">
-<td colspan="3">9홀합계</td>
-<td id="s1a" class="sum-val">0</td><td id="s1b" class="b-course-bg sum-val">0</td>
-<td id="s2a" class="sum-val">0</td><td id="s2b" class="b-course-bg sum-val">0</td>
-<td id="s3a" class="sum-val">0</td><td id="s3b" class="b-course-bg sum-val">0</td>
-<td id="s4a" class="sum-val">0</td><td id="s4b" class="b-course-bg sum-val">0</td>
-</tr>
-<tr class="sum-total-row">
-<td colspan="3">18홀합계</td>
-<td colspan="2" id="t1" class="sum-val">0</td>
-<td colspan="2" id="t2" class="sum-val">0</td>
-<td colspan="2" id="t3" class="sum-val">0</td>
-<td colspan="2" id="t4" class="sum-val">0</td>
-</tr>
-<tr class="rank-row">
-<td colspan="3">순위</td>
-<td colspan="2" id="r1" class="rank-val"></td>
-<td colspan="2" id="r2" class="rank-val"></td>
-<td colspan="2" id="r3" class="rank-val"></td>
-<td colspan="2" id="r4" class="rank-val"></td>
-</tr>
-</tfoot>
-</table>
-</div>
+  <div class="table-wrapper">
+    <table>
+      <colgroup>
+        <col style="width: 8.5%;">
+        <col style="width: 6.5%;">
+        <col style="width: 6.5%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+        <col style="width: 9.8%;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="th-hole-header" id="th-hole-box" rowspan="2">홀<span class="th-sub-text">NO</span></th>
+          <th class="th-hole-header" colspan="2">파<span class="th-sub-text">PAR</span></th>
+          <th colspan="2"><input type="text" class="player-name-input" id="p1-name" placeholder="이름" oninput="saveData()"></th>
+          <th colspan="2"><input type="text" class="player-name-input" id="p2-name" placeholder="이름" oninput="saveData()"></th>
+          <th colspan="2"><input type="text" class="player-name-input" id="p3-name" placeholder="이름" oninput="saveData()"></th>
+          <th colspan="2"><input type="text" class="player-name-input" id="p4-name" placeholder="이름" oninput="saveData()"></th>
+        </tr>
+        <tr class="sub-header">
+          <th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
+          <th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
+          <th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
+          <th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
+          <th class="lbl-c1">A</th><th class="b-course-bg lbl-c2">B</th>
+        </tr>
+      </thead>
+      <tbody>
+        <script>
+          for (var h = 1; h <= 9; h++) {
+            document.write('<tr>');
+            document.write('<td><b>' + h + '</b></td>');
+            document.write('<td style="background-color: #f5faf5 !important;"><input type="number" class="par-val par-a" style="background-color: #f5faf5 !important;" oninput="onInputChange()"></td>');
+            document.write('<td style="background-color: #fff6f8 !important;"><input type="number" class="par-val par-b" style="background-color: #fff6f8 !important;" oninput="onInputChange()"></td>');
+            for (var p = 1; p <= 4; p++) {
+              document.write('<td><input type="number" class="p' + p + 'a score-a score-input" oninput="onInputChange()" onkeyup="onInputChange()" onchange="onInputChange()"></td>');
+              document.write('<td class="b-course-bg"><input type="number" class="p' + p + 'b score-b score-input" oninput="onInputChange()" onkeyup="onInputChange()" onchange="onInputChange()"></td>');
+            }
+            document.write('</tr>');
+          }
+        </script>
+      </tbody>
+      <tfoot>
+        <tr class="sum-9-row">
+          <td colspan="3">9홀합계</td>
+          <td id="s1a" class="sum-val">0</td><td id="s1b" class="b-course-bg sum-val">0</td>
+          <td id="s2a" class="sum-val">0</td><td id="s2b" class="b-course-bg sum-val">0</td>
+          <td id="s3a" class="sum-val">0</td><td id="s3b" class="b-course-bg sum-val">0</td>
+          <td id="s4a" class="sum-val">0</td><td id="s4b" class="b-course-bg sum-val">0</td>
+        </tr>
+        <tr class="sum-total-row">
+          <td colspan="3">18홀합계</td>
+          <td colspan="2" id="t1" class="sum-val">0</td>
+          <td colspan="2" id="t2" class="sum-val">0</td>
+          <td colspan="2" id="t3" class="sum-val">0</td>
+          <td colspan="2" id="t4" class="sum-val">0</td>
+        </tr>
+        <tr class="rank-row">
+          <td colspan="3">순위</td>
+          <td colspan="2" id="r1" class="rank-val"></td>
+          <td colspan="2" id="r2" class="rank-val"></td>
+          <td colspan="2" id="r3" class="rank-val"></td>
+          <td colspan="2" id="r4" class="rank-val"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
 
 <div class="btn-group">
-<button type="button" class="btn btn-lock" id="btn-lock" onclick="toggleLock()">🔒 화면 잠금</button>
-<button type="button" class="btn btn-save" id="btn-save" onclick="saveAsImage()">📸 사진으로 저장</button>
-<button type="button" class="btn btn-reset" id="btn-reset" onclick="resetForm()">전체 초기화</button>
+  <button type="button" class="btn btn-lock" id="btn-lock" onclick="toggleLock()">🔒 화면 잠금</button>
+  <button type="button" class="btn btn-save" id="btn-save" onclick="saveAsImage()">📸 사진으로 저장</button>
+  <button type="button" class="btn btn-reset" id="btn-reset" onclick="resetForm()">전체 초기화</button>
 </div>
 
 <script>
 var isLocked = false;
-var isSaving = false;
 var TOTAL_PLAYERS = 4;
 var COURSES = ['a', 'b'];
 
 function getTodayDateString() {
-var today = new Date();
-return today.getFullYear() + '.' + (today.getMonth() + 1) + '.' + today.getDate();
+  var today = new Date();
+  return today.getFullYear() + '.' + (today.getMonth() + 1) + '.' + today.getDate();
 }
 
 window.onload = function() {
-loadData();
-var dateElem = document.getElementById('game-date');
-if(dateElem && !dateElem.value) {
-dateElem.value = getTodayDateString();
-}
-updateCourseHeaders();
-checkHoleInOneColor();
-calc();
-saveData();
+  loadData();
+  var dateElem = document.getElementById('game-date');
+  if(dateElem) {
+    dateElem.value = getTodayDateString();
+  }
+  updateCourseHeaders();
+  checkHoleInOneColor();
+  calc();
+  saveData();
 };
 
 function updateCourseHeaders() {
-var val = document.getElementById('course-select').value;
-var parts = val.split('-');
-var c1 = parts[0];
-var c2 = parts[1];
-
-var listC1 = document.getElementsByClassName('lbl-c1');
-for(var i=0; i<listC1.length; i++) {
-listC1[i].innerText = c1;
-}
-var listC2 = document.getElementsByClassName('lbl-c2');
-for(var i=0; i<listC2.length; i++) {
-listC2[i].innerText = c2;
-}
+  var val = document.getElementById('course-select').value;
+  var parts = val.split('-');
+  var c1 = parts[0];
+  var c2 = parts[1];
+  
+  var listC1 = document.getElementsByClassName('lbl-c1');
+  for(var i=0; i<listC1.length; i++) {
+    listC1[i].innerText = c1;
+  }
+  var listC2 = document.getElementsByClassName('lbl-c2');
+  for(var i=0; i<listC2.length; i++) {
+    listC2[i].innerText = c2;
+  }
 }
 
 function toggleLock() {
-isLocked = !isLocked;
-var inputs = document.getElementsByTagName('input');
-var selects = document.getElementsByTagName('select');
-var btnLock = document.getElementById('btn-lock');
-var lockBanner = document.getElementById('lock-banner');
-
-for (var i = 0; i < inputs.length; i++) {
-inputs[i].disabled = isLocked;
-}
-for (var j = 0; j < selects.length; j++) {
-selects[j].disabled = isLocked;
-}
-
-if (isLocked) {
-btnLock.innerText = '🔓 잠금 해제';
-btnLock.classList.add('locked');
-lockBanner.style.display = 'block';
-} else {
-btnLock.innerText = '🔒 화면 잠금';
-btnLock.classList.remove('locked');
-lockBanner.style.display = 'none';
-}
+  isLocked = !isLocked;
+  var inputs = document.getElementsByTagName('input');
+  var selects = document.getElementsByTagName('select');
+  var btnLock = document.getElementById('btn-lock');
+  var lockBanner = document.getElementById('lock-banner');
+  
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].disabled = isLocked;
+  }
+  for (var j = 0; j < selects.length; j++) {
+    selects[j].disabled = isLocked;
+  }
+  
+  if (isLocked) {
+    btnLock.innerText = '🔓 잠금 해제';
+    btnLock.classList.add('locked');
+    lockBanner.style.display = 'block';
+  } else {
+    btnLock.innerText = '🔒 화면 잠금';
+    btnLock.classList.remove('locked');
+    lockBanner.style.display = 'none';
+  }
 }
 
 function getSum(cls) {
-var list = document.getElementsByClassName(cls);
-var total = 0;
-for (var i = 0; i < list.length; i++) {
-var v = parseInt(list[i].value, 10);
-if (!isNaN(v)) {
-total += v;
-}
-}
-return total;
+  var list = document.getElementsByClassName(cls);
+  var total = 0;
+  for (var i = 0; i < list.length; i++) {
+    var v = parseInt(list[i].value, 10);
+    if (!isNaN(v)) {
+      total += v;
+    }
+  }
+  return total;
 }
 
 function getPlayerScoresReverse(p) {
-var scores = [];
-for (var c = COURSES.length - 1; c >= 0; c--) {
-var list = document.getElementsByClassName('p' + p + COURSES[c]);
-for (var i = list.length - 1; i >= 0; i--) {
-var v = parseInt(list[i].value, 10);
-scores.push(isNaN(v) ? 0 : v);
-}
-}
-return scores;
+  var scores = [];
+  for (var c = COURSES.length - 1; c >= 0; c--) {
+    var list = document.getElementsByClassName('p' + p + COURSES[c]);
+    for (var i = list.length - 1; i >= 0; i--) {
+      var v = parseInt(list[i].value, 10);
+      scores.push(isNaN(v) ? 0 : v);
+    }
+  }
+  return scores;
 }
 
 function checkHoleInOneColor() {
-var numInputs = document.querySelectorAll('input[type="number"]:not(.par-val)');
-for (var i = 0; i < numInputs.length; i++) {
-var rawVal = numInputs[i].value ? numInputs[i].value.toString().trim() : '';
-if (rawVal === '1') {
-numInputs[i].classList.add('hole-in-one');
-numInputs[i].style.setProperty('color', '#d32f2f', 'important');
-numInputs[i].style.setProperty('-webkit-text-fill-color', '#d32f2f', 'important');
-} else {
-numInputs[i].classList.remove('hole-in-one');
-numInputs[i].style.removeProperty('color');
-numInputs[i].style.removeProperty('-webkit-text-fill-color');
-}
-}
+  var numInputs = document.querySelectorAll('input[type="number"]:not(.par-val)');
+  for (var i = 0; i < numInputs.length; i++) {
+    var rawVal = numInputs[i].value ? numInputs[i].value.toString().trim() : '';
+    if (rawVal === '1') {
+      numInputs[i].classList.add('hole-in-one');
+      numInputs[i].style.setProperty('color', '#d32f2f', 'important');
+      numInputs[i].style.setProperty('-webkit-text-fill-color', '#d32f2f', 'important');
+    } else {
+      numInputs[i].classList.remove('hole-in-one');
+      numInputs[i].style.removeProperty('color');
+      numInputs[i].style.removeProperty('-webkit-text-fill-color');
+    }
+  }
 }
 
 function calc() {
-var playerData = [];
-var hasScores = false;
-
-for (var p = 1; p <= TOTAL_PLAYERS; p++) {
-var total18 = 0;
-
-for (var c = 0; c < COURSES.length; c++) {
-var courseCode = COURSES[c];
-var sum = getSum('p' + p + courseCode);
-document.getElementById('s' + p + courseCode).innerText = sum;
-total18 += sum;
-}
-
-document.getElementById('t' + p).innerText = total18;
-
-var holeScoresReverse = getPlayerScoresReverse(p);
-
-playerData.push({
-player: p,
-score: total18,
-holesReverse: holeScoresReverse
-});
-
-if (total18 > 0) hasScores = true;
-}
-
-if (hasScores) {
-var totalHoles = COURSES.length * 9;
-var sorted = playerData.slice().sort(function(a, b) {
-if (a.score !== b.score) {
-return a.score - b.score;
-}
-for (var h = 0; h < totalHoles; h++) {
-var scoreA = a.holesReverse[h];
-var scoreB = b.holesReverse[h];
-if (scoreA !== scoreB) {
-return scoreA - scoreB;
-}
-}
-return 0;
-});
-
-function isIdentical(p1, p2) {
-if (p1.score !== p2.score) return false;
-for (var h = 0; h < totalHoles; h++) {
-if (p1.holesReverse[h] !== p2.holesReverse[h]) return false;
-}
-return true;
-}
-
-var ranks = {};
-var currentRank = 1;
-
-for (var i = 0; i < sorted.length; i++) {
-if (i > 0 && !isIdentical(sorted[i], sorted[i - 1])) {
-currentRank = i + 1;
-}
-ranks[sorted[i].player] = currentRank;
-}
-
-for (var p = 1; p <= TOTAL_PLAYERS; p++) {
-document.getElementById('r' + p).innerText = ranks[p];
-}
-} else {
-for (var p = 1; p <= TOTAL_PLAYERS; p++) {
-document.getElementById('r' + p).innerText = '';
-}
-}
+  var playerData = [];
+  var hasScores = false;
+  
+  for (var p = 1; p <= TOTAL_PLAYERS; p++) {
+    var total18 = 0;
+    
+    for (var c = 0; c < COURSES.length; c++) {
+      var courseCode = COURSES[c];
+      var sum = getSum('p' + p + courseCode);
+      document.getElementById('s' + p + courseCode).innerText = sum;
+      total18 += sum;
+    }
+    
+    document.getElementById('t' + p).innerText = total18;
+    
+    var holeScoresReverse = getPlayerScoresReverse(p);
+    
+    playerData.push({
+      player: p,
+      score: total18,
+      holesReverse: holeScoresReverse
+    });
+    
+    if (total18 > 0) hasScores = true;
+  }
+  
+  if (hasScores) {
+    var totalHoles = COURSES.length * 9;
+    var sorted = playerData.slice().sort(function(a, b) {
+      if (a.score !== b.score) {
+        return a.score - b.score;
+      }
+      for (var h = 0; h < totalHoles; h++) {
+        var scoreA = a.holesReverse[h];
+        var scoreB = b.holesReverse[h];
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+      }
+      return 0;
+    });
+    
+    function isIdentical(p1, p2) {
+      if (p1.score !== p2.score) return false;
+      for (var h = 0; h < totalHoles; h++) {
+        if (p1.holesReverse[h] !== p2.holesReverse[h]) return false;
+      }
+      return true;
+    }
+    
+    var ranks = {};
+    var currentRank = 1;
+    
+    for (var i = 0; i < sorted.length; i++) {
+      if (i > 0 && !isIdentical(sorted[i], sorted[i - 1])) {
+        currentRank = i + 1;
+      }
+      ranks[sorted[i].player] = currentRank;
+    }
+    
+    for (var p = 1; p <= TOTAL_PLAYERS; p++) {
+      document.getElementById('r' + p).innerText = ranks[p];
+    }
+  } else {
+    for (var p = 1; p <= TOTAL_PLAYERS; p++) {
+      document.getElementById('r' + p).innerText = '';
+    }
+  }
 }
 
 function onInputChange() {
-checkHoleInOneColor();
-calc();
-saveData();
+  checkHoleInOneColor();
+  calc();
+  saveData();
 }
 
 function saveData() {
-var inputs = document.getElementsByTagName('input');
-var data = {};
-for (var i = 0; i < inputs.length; i++) {
-data[i] = inputs[i].value;
-}
-data['course_select'] = document.getElementById('course-select').value;
-localStorage.setItem('parkgolf_scorecard_data_18holes_v1', JSON.stringify(data));
+  var inputs = document.getElementsByTagName('input');
+  var data = {};
+  for (var i = 0; i < inputs.length; i++) {
+    data[i] = inputs[i].value;
+  }
+  data['course_select'] = document.getElementById('course-select').value;
+  localStorage.setItem('parkgolf_scorecard_data_18holes_v1', JSON.stringify(data));
 }
 
 function loadData() {
-var saved = localStorage.getItem('parkgolf_scorecard_data_18holes_v1');
-if (saved) {
-var data = JSON.parse(saved);
-var inputs = document.getElementsByTagName('input');
-for (var i = 0; i < inputs.length; i++) {
-if (data[i] !== undefined) {
-inputs[i].value = data[i];
-}
-}
-if (data['course_select']) {
-document.getElementById('course-select').value = data['course_select'];
-}
-checkHoleInOneColor();
-calc();
-}
+  var saved = localStorage.getItem('parkgolf_scorecard_data_18holes_v1');
+  if (saved) {
+    var data = JSON.parse(saved);
+    var inputs = document.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+      if (data[i] !== undefined) {
+        inputs[i].value = data[i];
+      }
+    }
+    if (data['course_select']) {
+      document.getElementById('course-select').value = data['course_select'];
+    }
+    checkHoleInOneColor();
+    calc();
+  }
 }
 
 function saveAsImage() {
-if (isSaving) return;
-isSaving = true;
-
-var saveBtn = document.getElementById('btn-save');
-saveBtn.disabled = true;
-
-var area = document.getElementById('capture-area');
-var courseName = document.getElementById('course-name').value.trim();
-var courseType = document.getElementById('course-select').value;
-var fileNamePrefix = courseName ? courseName + '(' + courseType + ')_' : '';
-
-html2canvas(area, {
-scale: 2.5,
-backgroundColor: '#ffffff',
-useCORS: true,
-logging: false,
-onclone: function(clonedDoc) {
-var clonedCard = clonedDoc.getElementById('capture-area');
-clonedCard.style.width = '380px';
-clonedCard.style.padding = '5px 5px 4px 5px';
-
-var styleEl = clonedDoc.createElement('style');
-styleEl.innerHTML = "#capture-area * { font-size: 13px !important; line-height: 1.15 !important; } " +
-"#capture-area h1 { font-size: 19px !important; margin-bottom: 4px !important; } " +
-"#capture-area .info-area { margin-bottom: 4px !important; font-size: 13px !important; } " +
-"#capture-area .th-hole-header { font-size: 12px !important; line-height: 1.0 !important; } " +
-"#capture-area .th-sub-text { font-size: 9px !important; } " +
-"#capture-area td, #capture-area th { height: 27px !important; line-height: 27px !important; } " +
-"#capture-area .sum-9-row td { height: 29px !important; line-height: 29px !important; font-size: 13px !important; } " +
-"#capture-area .sum-total-row td { height: 30px !important; line-height: 30px !important; font-size: 13px !important; } " +
-"#capture-area .rank-row td { height: 27px !important; line-height: 27px !important; font-size: 13px !important; } " +
-"#capture-area .score-span { font-size: 16px !important; font-weight: bold !important; } " +
-"#capture-area .sum-val, #capture-area .rank-val { font-size: 15px !important; font-weight: bold !important; }";
-clonedDoc.head.appendChild(styleEl);
-
-var holeHeader = clonedDoc.getElementById('th-hole-box');
-if (holeHeader) {
-holeHeader.innerHTML = '홀<br><span style="font-size: 9px; font-weight: bold; color: #555; display: inline-block; transform: scale(0.9); margin-top: 1px;">NO</span>';
-}
-
-var courseInput = clonedDoc.getElementById('course-name');
-var dateInput = clonedDoc.getElementById('game-date');
-var courseSelect = clonedDoc.getElementById('course-select');
-
-var courseVal = courseInput.value || courseInput.placeholder || '';
-var dateVal = dateInput.value || getTodayDateString();
-var selectVal = courseSelect.value;
-
-var courseSpan = clonedDoc.createElement('span');
-courseSpan.style.display = 'inline-block';
-courseSpan.style.width = '100%';
-courseSpan.style.textAlign = 'left';
-courseSpan.style.borderBottom = '1px solid #999';
-courseSpan.style.fontSize = '13px';
-courseSpan.style.fontWeight = 'bold';
-courseSpan.style.color = '#333';
-courseSpan.style.padding = '0 1px';
-courseSpan.style.height = '18px';
-courseSpan.style.lineHeight = '18px';
-courseSpan.innerText = courseVal;
-
-var selectSpan = clonedDoc.createElement('span');
-selectSpan.style.display = 'inline-block';
-selectSpan.style.width = '45px';
-selectSpan.style.textAlign = 'center';
-selectSpan.style.borderBottom = '1px solid #999';
-selectSpan.style.fontSize = '13px';
-selectSpan.style.fontWeight = 'bold';
-selectSpan.style.color = '#333';
-selectSpan.style.padding = '0 1px';
-selectSpan.style.height = '18px';
-selectSpan.style.lineHeight = '18px';
-selectSpan.innerText = selectVal;
-
-var dateSpan = clonedDoc.createElement('span');
-dateSpan.style.display = 'inline-block';
-dateSpan.style.width = '100%';
-dateSpan.style.textAlign = 'right';
-dateSpan.style.borderBottom = '1px solid #999';
-dateSpan.style.fontSize = '13px';
-dateSpan.style.fontWeight = 'bold';
-dateSpan.style.color = '#333';
-dateSpan.style.padding = '0 1px';
-dateSpan.style.height = '18px';
-dateSpan.style.lineHeight = '18px';
-dateSpan.innerText = dateVal;
-
-courseInput.parentNode.replaceChild(courseSpan, courseInput);
-courseSelect.parentNode.replaceChild(selectSpan, courseSelect);
-dateInput.parentNode.replaceChild(dateSpan, dateInput);
-
-var allInputs = clonedDoc.querySelectorAll('.table-wrapper input');
-allInputs.forEach(function(input) {
-var val = input.value || '';
-var placeholder = input.placeholder || '';
-
-var span = clonedDoc.createElement('span');
-span.style.display = 'flex';
-span.style.justifyContent = 'center';
-span.style.alignItems = 'center';
-span.style.width = '100%';
-span.style.height = '100%';
-
-if (input.classList.contains('player-name-input')) {
-span.innerText = val || placeholder;
-span.style.fontWeight = 'bold';
-span.style.fontSize = '13px';
-span.style.color = val ? '#333' : '#a0a0a0';
-} else {
-span.innerText = val;
-if (input.classList.contains('score-input')) {
-span.classList.add('score-span');
-span.style.fontSize = '16px';
-} else {
-span.style.fontSize = '13px';
-}
-
-if (input.classList.contains('score-input') && (input.classList.contains('hole-in-one') || val === '1')) {
-span.style.color = '#d32f2f';
-span.style.fontWeight = 'bold';
-span.style.fontSize = '17px';
-} else if (input.classList.contains('score-a')) {
-span.style.color = '#3E7F3A';
-span.style.fontWeight = 'bold';
-} else if (input.classList.contains('score-b')) {
-span.style.color = '#7A3DB8';
-span.style.fontWeight = 'bold';
-} else {
-span.style.color = '#333';
-span.style.fontWeight = 'bold';
-}
-}
-input.parentNode.replaceChild(span, input);
-});
-}
-}).then(function(canvas) {
-var link = document.createElement('a');
-var today = new Date();
-var dateStr = today.getFullYear() + '-' +
-(('0' + (today.getMonth() + 1)).slice(-2)) + '-' +
-(('0' + today.getDate()).slice(-2));
-
-link.download = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.jpg';
-link.href = canvas.toDataURL('image/jpeg', 0.95);
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-
-saveBtn.disabled = false;
-isSaving = false;
-}).catch(function(err) {
-saveBtn.disabled = false;
-isSaving = false;
-alert('이미지 저장 중 오류가 발생했습니다: ' + err);
-});
+  var area = document.getElementById('capture-area');
+  var courseName = document.getElementById('course-name').value.trim();
+  var courseType = document.getElementById('course-select').value;
+  var fileNamePrefix = courseName ? courseName + '(' + courseType + ')_' : '';
+  
+  html2canvas(area, {
+    scale: 2.5,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    onclone: function(clonedDoc) {
+      var clonedCard = clonedDoc.getElementById('capture-area');
+      clonedCard.style.width = '380px';
+      clonedCard.style.padding = '6px 5px 5px 5px';
+      
+      /* 캡처 사진 세로칸 길이를 1px 늘리기 위해 td, th height/line-height를 28px -> 29px로 조정 */
+      var styleEl = clonedDoc.createElement('style');
+      styleEl.innerHTML = "#capture-area * { font-size: 13px !important; line-height: 1.15 !important; } " +
+        "#capture-area h1 { font-size: 19px !important; margin-bottom: 5px !important; } " +
+        "#capture-area .info-area { margin-bottom: 5px !important; font-size: 13px !important; } " +
+        "#capture-area .th-hole-header { font-size: 12px !important; line-height: 1.0 !important; } " +
+        "#capture-area .th-sub-text { font-size: 9px !important; } " +
+        "#capture-area td, #capture-area th { height: 29px !important; line-height: 29px !important; } " +
+        "#capture-area .sum-9-row td { height: 31px !important; line-height: 31px !important; font-size: 13px !important; } " +
+        "#capture-area .sum-total-row td { height: 33px !important; line-height: 33px !important; font-size: 13px !important; } " +
+        "#capture-area .rank-row td { height: 29px !important; line-height: 29px !important; font-size: 13px !important; } " +
+        "#capture-area .score-span { font-size: 16px !important; font-weight: bold !important; } " +
+        "#capture-area .sum-val, #capture-area .rank-val { font-size: 15px !important; font-weight: bold !important; }";
+      clonedDoc.head.appendChild(styleEl);
+      
+      var holeHeader = clonedDoc.getElementById('th-hole-box');
+      if (holeHeader) {
+        holeHeader.innerHTML = '홀<br><span style="font-size: 9px; font-weight: bold; color: #555; display: inline-block; transform: scale(0.9); margin-top: 1px;">NO</span>';
+      }
+      
+      var courseInput = clonedDoc.getElementById('course-name');
+      var dateInput = clonedDoc.getElementById('game-date');
+      var courseSelect = clonedDoc.getElementById('course-select');
+      
+      var courseVal = courseInput.value || courseInput.placeholder || '';
+      var dateVal = dateInput.value || getTodayDateString();
+      var selectVal = courseSelect.value;
+      
+      var courseSpan = clonedDoc.createElement('span');
+      courseSpan.style.display = 'inline-block';
+      courseSpan.style.width = '100%';
+      courseSpan.style.textAlign = 'left';
+      courseSpan.style.borderBottom = '1px solid #999';
+      courseSpan.style.fontSize = '13px';
+      courseSpan.style.fontWeight = 'bold';
+      courseSpan.style.color = '#333';
+      courseSpan.style.padding = '0 1px';
+      courseSpan.style.height = '18px';
+      courseSpan.style.lineHeight = '18px';
+      courseSpan.innerText = courseVal;
+      
+      var selectSpan = clonedDoc.createElement('span');
+      selectSpan.style.display = 'inline-block';
+      selectSpan.style.width = '45px';
+      selectSpan.style.textAlign = 'center';
+      selectSpan.style.borderBottom = '1px solid #999';
+      selectSpan.style.fontSize = '13px';
+      selectSpan.style.fontWeight = 'bold';
+      selectSpan.style.color = '#333';
+      selectSpan.style.padding = '0 1px';
+      selectSpan.style.height = '18px';
+      selectSpan.style.lineHeight = '18px';
+      selectSpan.innerText = selectVal;
+      
+      var dateSpan = clonedDoc.createElement('span');
+      dateSpan.style.display = 'inline-block';
+      dateSpan.style.width = '100%';
+      dateSpan.style.textAlign = 'right';
+      dateSpan.style.borderBottom = '1px solid #999';
+      dateSpan.style.fontSize = '13px';
+      dateSpan.style.fontWeight = 'bold';
+      dateSpan.style.color = '#333';
+      dateSpan.style.padding = '0 1px';
+      dateSpan.style.height = '18px';
+      dateSpan.style.lineHeight = '18px';
+      dateSpan.innerText = dateVal;
+      
+      courseInput.parentNode.replaceChild(courseSpan, courseInput);
+      courseSelect.parentNode.replaceChild(selectSpan, courseSelect);
+      dateInput.parentNode.replaceChild(dateSpan, dateInput);
+      
+      var allInputs = clonedDoc.querySelectorAll('.table-wrapper input');
+      allInputs.forEach(function(input) {
+        var val = input.value || '';
+        var placeholder = input.placeholder || '';
+        
+        var span = clonedDoc.createElement('span');
+        span.style.display = 'flex';
+        span.style.justifyContent = 'center';
+        span.style.alignItems = 'center';
+        span.style.width = '100%';
+        span.style.height = '100%';
+        
+        if (input.classList.contains('player-name-input')) {
+          span.innerText = val || placeholder;
+          span.style.fontWeight = 'bold';
+          span.style.fontSize = '13px';
+          span.style.color = val ? '#333' : '#a0a0a0';
+        } else {
+          span.innerText = val;
+          if (input.classList.contains('score-input')) {
+            span.classList.add('score-span');
+            span.style.fontSize = '16px';
+          } else {
+            span.style.fontSize = '13px';
+          }
+          
+          if (input.classList.contains('score-input') && (input.classList.contains('hole-in-one') || val === '1')) {
+            span.style.color = '#d32f2f';
+            span.style.fontWeight = 'bold';
+            span.style.fontSize = '17px';
+          } else if (input.classList.contains('score-a')) {
+            span.style.color = '#3E7F3A';
+            span.style.fontWeight = 'bold';
+          } else if (input.classList.contains('score-b')) {
+            span.style.color = '#7A3DB8';
+            span.style.fontWeight = 'bold';
+          } else {
+            span.style.color = '#333';
+            span.style.fontWeight = 'bold';
+          }
+        }
+        input.parentNode.replaceChild(span, input);
+      });
+    }
+  }).then(function(canvas) {
+    var link = document.createElement('a');
+    var today = new Date();
+    var dateStr = today.getFullYear() + '-' + 
+                  (('0' + (today.getMonth() + 1)).slice(-2)) + '-' + 
+                  (('0' + today.getDate()).slice(-2));
+    
+    link.download = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+  }).catch(function(err) {
+    alert('이미지 저장 중 오류가 발생했습니다: ' + err);
+  });
 }
 
 function resetForm() {
-if (isLocked) {
-alert("화면이 잠겨 있습니다. '잠금 해제' 후 초기화해 주세요.");
-return;
-}
-
-if (confirm("모든 스코어, 이름, 구장 정보를 초기화하시겠습니까?")) {
-localStorage.removeItem('parkgolf_scorecard_data_18holes_v1');
-
-var inputs = document.getElementsByTagName('input');
-for (var i = 0; i < inputs.length; i++) {
-inputs[i].value = '';
-}
-
-document.getElementById('course-select').value = 'A-B';
-document.getElementById('game-date').value = getTodayDateString();
-
-updateCourseHeaders();
-checkHoleInOneColor();
-calc();
-saveData();
-}
+  if (isLocked) {
+    alert("화면이 잠겨 있습니다. '잠금 해제' 후 초기화해 주세요.");
+    return;
+  }
+  
+  if (confirm("모든 스코어, 이름, 구장 정보를 초기화하시겠습니까?")) {
+    localStorage.removeItem('parkgolf_scorecard_data_18holes_v1');
+    
+    var inputs = document.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].value = '';
+    }
+    
+    document.getElementById('course-select').value = 'A-B';
+    document.getElementById('game-date').value = getTodayDateString();
+    
+    updateCourseHeaders();
+    checkHoleInOneColor();
+    calc();
+    saveData();
+  }
 }
 </script>
 
