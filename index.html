@@ -664,10 +664,16 @@ document.getElementById('course-select').value = data['course_select'];
 }
 
 function saveAsImage() {
+var ua = navigator.userAgent.toLowerCase();
+var isSamsung = ua.indexOf('samsungbrowser') > -1;
 var btnSave = document.getElementById('btn-save');
 var originalText = btnSave.innerText;
+
+// 크롬 브라우저일 때만 '저장 중...' 문구 표시
+if (!isSamsung) {
 btnSave.innerText = '⏳ 저장 중...';
 btnSave.disabled = true;
+}
 
 var area = document.getElementById('capture-area');
 var courseName = document.getElementById('course-name').value.trim();
@@ -803,8 +809,16 @@ var today = new Date();
 var dateStr = today.getFullYear() + '-' +
 (('0' + (today.getMonth() + 1)).slice(-2)) + '-' +
 (('0' + today.getDate()).slice(-2));
-var fileName = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.png';
 
+if (isSamsung) {
+// 삼성 인터넷: 기존의 빠른 이미지 다운로드 방식 사용
+var link = document.createElement('a');
+link.download = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.jpg';
+link.href = canvas.toDataURL('image/jpeg', 0.95);
+link.click();
+} else {
+// 크롬 브라우저: 모래시계(Blob) 안정 다운로드 방식 사용
+var fileName = fileNamePrefix + '파크골프_스코어카드18홀_' + dateStr + '.png';
 canvas.toBlob(function(blob) {
 if (!blob) {
 alert('이미지 생성에 실패했습니다.');
@@ -819,7 +833,6 @@ link.href = url;
 link.download = fileName;
 document.body.appendChild(link);
 
-// 크롬 표준 호환성 이벤트 차이 해결
 if (typeof link.click === 'function') {
 link.click();
 } else {
@@ -836,6 +849,7 @@ btnSave.innerText = originalText;
 btnSave.disabled = false;
 }, 800);
 }, 'image/png');
+}
 
 }).catch(function(err) {
 alert('이미지 저장 중 오류가 발생했습니다: ' + err);
