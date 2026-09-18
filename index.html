@@ -11,7 +11,7 @@
 --bg-color: #f8f9fa;
 }
 
-• {
+* {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
@@ -24,7 +24,7 @@ text-size-adjust: 100% !important;
 
 body {
 background-color: var(--bg-color);
-padding: 5px 4px;
+padding: 7px 4px;
 max-width: 440px;
 margin: 0 auto;
 }
@@ -32,7 +32,7 @@ margin: 0 auto;
 .card-container {
 background: #ffffff;
 border: 2px solid var(--border-color);
-padding: 7px 5px 5px 5px;
+padding: 9px 5px 7px 5px;
 border-radius: 6px;
 position: relative;
 width: 100%;
@@ -45,18 +45,18 @@ background-color: #fff3cd;
 color: #856404;
 border: 1px solid #ffeeba;
 text-align: center;
-padding: 4px;
+padding: 6px;
 font-size: 13px;
 font-weight: bold;
 border-radius: 4px;
-margin-bottom: 5px;
+margin-bottom: 6px;
 }
 
 h1 {
 text-align: center;
 font-size: 21px;
 font-weight: bold;
-margin-bottom: 6px;
+margin-bottom: 8px;
 line-height: 1.2;
 }
 
@@ -67,7 +67,7 @@ align-items: center !important;
 font-size: 13px;
 font-weight: bold;
 color: #333;
-margin-bottom: 6px;
+margin-bottom: 8px;
 padding: 0 2px;
 width: 100%;
 box-sizing: border-box;
@@ -78,7 +78,7 @@ gap: 4px;
 display: flex;
 align-items: center;
 white-space: nowrap;
-height: 22px;
+height: 24px;
 }
 
 .info-item.flex-grow {
@@ -91,7 +91,7 @@ white-space: nowrap !important;
 margin-right: 2px;
 flex-shrink: 0;
 font-size: 13px;
-line-height: 22px;
+line-height: 24px;
 }
 
 .info-input, .info-select {
@@ -103,8 +103,8 @@ font-weight: bold !important;
 color: #333 !important;
 outline: none !important;
 padding: 0 1px !important;
-height: 20px !important;
-line-height: 20px !important;
+height: 22px !important;
+line-height: 22px !important;
 }
 
 #course-name {
@@ -148,7 +148,7 @@ font-size: 13px;
 th, td {
 border: 1px solid var(--border-color);
 padding: 0;
-height: 32px;
+height: 34px;
 vertical-align: middle;
 word-break: keep-all;
 }
@@ -252,12 +252,12 @@ background-color: #fafafa;
 
 .sum-9-row {
 background-color: #f8f9fa;
-height: 33px !important;
+height: 36px !important;
 }
 
 .sum-9-row td {
-height: 33px !important;
-line-height: 33px;
+height: 36px !important;
+line-height: 36px;
 font-size: 13px !important;
 font-weight: bold !important;
 }
@@ -266,14 +266,14 @@ font-weight: bold !important;
 background-color: #fff5f5;
 font-weight: bold;
 color: #d32f2f;
-height: 34px !important;
+height: 38px !important;
 }
 
 .sum-total-row td {
 font-size: 13px !important;
 font-weight: 800;
-height: 34px !important;
-line-height: 34px;
+height: 38px !important;
+line-height: 38px;
 }
 
 td.sum-val {
@@ -285,14 +285,14 @@ font-weight: bold !important;
 background-color: #fffde7;
 font-weight: bold;
 color: #333;
-height: 31px !important;
+height: 34px !important;
 }
 
 .rank-row td {
 font-size: 13px !important;
 font-weight: bold;
-height: 31px !important;
-line-height: 31px;
+height: 34px !important;
+line-height: 34px;
 }
 
 td.rank-val {
@@ -301,7 +301,7 @@ font-weight: bold !important;
 }
 
 .btn-group {
-margin-top: 8px;
+margin-top: 10px;
 display: flex;
 gap: 6px;
 flex-wrap: wrap;
@@ -311,7 +311,7 @@ z-index: 999;
 
 .btn {
 flex: 1;
-padding: 10px 2px;
+padding: 11px 2px;
 border: 1px solid #ccc;
 border-radius: 6px;
 background-color: #ffffff;
@@ -472,10 +472,9 @@ return today.getFullYear() + '.' + (today.getMonth() + 1) + '.' + today.getDate(
 
 window.onload = function() {
 loadData();
-var dateElem = document.getElementById('game-date');
-if(dateElem && !dateElem.value) {
-dateElem.value = getTodayDateString();
-}
+// 페이지 실행 시 항상 오늘 날짜로 강제 업데이트
+document.getElementById('game-date').value = getTodayDateString();
+
 updateCourseHeaders();
 checkHoleInOneColor();
 calc();
@@ -663,8 +662,6 @@ inputs[i].value = data[i];
 if (data['course_select']) {
 document.getElementById('course-select').value = data['course_select'];
 }
-checkHoleInOneColor();
-calc();
 }
 }
 
@@ -682,18 +679,18 @@ logging: false,
 onclone: function(clonedDoc) {
 var clonedCard = clonedDoc.getElementById('capture-area');
 clonedCard.style.width = '380px';
-clonedCard.style.padding = '5px 5px 4px 5px';
+clonedCard.style.padding = '6px 5px 5px 5px';
 
 var styleEl = clonedDoc.createElement('style');
 styleEl.innerHTML = "#capture-area * { font-size: 13px !important; line-height: 1.15 !important; } " +
-"#capture-area h1 { font-size: 19px !important; margin-bottom: 4px !important; } " +
-"#capture-area .info-area { margin-bottom: 4px !important; font-size: 13px !important; } " +
+"#capture-area h1 { font-size: 19px !important; margin-bottom: 5px !important; } " +
+"#capture-area .info-area { margin-bottom: 5px !important; font-size: 13px !important; } " +
 "#capture-area .th-hole-header { font-size: 12px !important; line-height: 1.0 !important; } " +
 "#capture-area .th-sub-text { font-size: 9px !important; } " +
-"#capture-area td, #capture-area th { height: 26px !important; line-height: 26px !important; } " +
-"#capture-area .sum-9-row td { height: 28px !important; line-height: 28px !important; font-size: 13px !important; } " +
-"#capture-area .sum-total-row td { height: 29px !important; line-height: 29px !important; font-size: 13px !important; } " +
-"#capture-area .rank-row td { height: 26px !important; line-height: 26px !important; font-size: 13px !important; } " +
+"#capture-area td, #capture-area th { height: 28px !important; line-height: 28px !important; } " +
+"#capture-area .sum-9-row td { height: 30px !important; line-height: 30px !important; font-size: 13px !important; } " +
+"#capture-area .sum-total-row td { height: 32px !important; line-height: 32px !important; font-size: 13px !important; } " +
+"#capture-area .rank-row td { height: 28px !important; line-height: 28px !important; font-size: 13px !important; } " +
 "#capture-area .score-span { font-size: 16px !important; font-weight: bold !important; } " +
 "#capture-area .sum-val, #capture-area .rank-val { font-size: 15px !important; font-weight: bold !important; }";
 clonedDoc.head.appendChild(styleEl);
@@ -840,4 +837,3 @@ saveData();
 
 </body>
 </html>
-
