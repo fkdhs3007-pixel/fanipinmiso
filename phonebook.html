@@ -7,7 +7,6 @@
 <title>모임별 회원 전화번호부</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -49,29 +48,33 @@ h1 {
    모임 목록
 ========================= */
 
-.group-link {
+.group-card {
+    background: white;
+    border: 1px solid #d7dee8;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.group-open {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     background: white;
-    border: 1px solid #d7dee8;
+    border: none;
 
     padding: 15px;
-    margin-bottom: 11px;
-
-    border-radius: 10px;
 
     cursor: pointer;
 
     text-align: left;
     font-family: inherit;
-
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
-.group-link:active {
+.group-open:active {
     background: #f1f5f9;
 }
 
@@ -100,24 +103,47 @@ h1 {
 }
 
 
+/* 모임 관리 버튼 */
+
+.group-manage {
+    display: flex;
+    border-top: 1px solid #e2e8f0;
+}
+
+.group-manage button {
+    flex: 1;
+    border: none;
+    padding: 9px 5px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.rename-group-btn {
+    background: #f8fafc;
+    color: #2563eb;
+    border-right: 1px solid #e2e8f0 !important;
+}
+
+.delete-group-btn {
+    background: #fff7f7;
+    color: #dc2626;
+}
+
+
 /* =========================
-   모임 추가 버튼
+   모임 추가
 ========================= */
 
 .add-group-btn {
     width: 100%;
     border: none;
-
     background: #7c3aed;
     color: white;
-
     padding: 13px;
-
     border-radius: 9px;
-
     font-size: 15px;
     font-weight: bold;
-
     cursor: pointer;
 }
 
@@ -127,7 +153,7 @@ h1 {
 
 
 /* =========================
-   상세 화면 상단
+   상세 화면
 ========================= */
 
 .top-row {
@@ -139,15 +165,10 @@ h1 {
 .back-btn {
     background: #64748b;
     color: white;
-
     border: none;
-
     padding: 8px 13px;
-
     border-radius: 7px;
-
     font-size: 13px;
-
     cursor: pointer;
 }
 
@@ -159,7 +180,7 @@ h1 {
 
 
 /* =========================
-   검색창
+   검색
 ========================= */
 
 .search-box {
@@ -169,17 +190,11 @@ h1 {
 
 .search-input {
     width: 100%;
-
     padding: 12px 42px 12px 40px;
-
     border: 1px solid #cbd5e1;
-
     border-radius: 10px;
-
     font-size: 14px;
-
     outline: none;
-
     background: #f8fafc;
 }
 
@@ -190,46 +205,30 @@ h1 {
 
 .search-icon {
     position: absolute;
-
     left: 13px;
-
     top: 50%;
-
     transform: translateY(-50%);
-
     font-size: 17px;
 }
 
 .clear-search {
     position: absolute;
-
     right: 10px;
-
     top: 50%;
-
     transform: translateY(-50%);
-
     border: none;
-
     background: #e2e8f0;
-
     color: #475569;
-
     width: 26px;
     height: 26px;
-
     border-radius: 50%;
-
     cursor: pointer;
-
     display: none;
 }
 
 .search-result {
     font-size: 12px;
-
     color: #64748b;
-
     margin: -3px 0 10px 3px;
 }
 
@@ -246,41 +245,29 @@ h1 {
 
 .member-card {
     border: 1px solid #dbe2ea;
-
     border-radius: 11px;
-
     padding: 11px;
-
     background: white;
-
     box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
 .member-top {
     display: grid;
-
     grid-template-columns: 1fr 1.5fr;
-
     gap: 7px;
 }
 
 .member-card input {
     width: 100%;
-
     border: 1px solid #d7dee8;
-
     padding: 9px;
-
     border-radius: 7px;
-
     font-size: 14px;
-
     outline: none;
 }
 
 .member-card input:focus {
     border-color: #2563eb;
-
     background: #f8fbff;
 }
 
@@ -290,30 +277,22 @@ h1 {
 
 
 /* =========================
-   전화 / 문자 / 삭제
+   회원 버튼
 ========================= */
 
 .member-actions {
     margin-top: 9px;
-
     display: flex;
-
     gap: 6px;
 }
 
 .action-btn {
     flex: 1;
-
     border: none;
-
     padding: 9px 4px;
-
     border-radius: 7px;
-
     color: white;
-
     font-size: 13px;
-
     cursor: pointer;
 }
 
@@ -336,48 +315,27 @@ h1 {
 
 .add-member-btn {
     width: 100%;
-
     margin-top: 13px;
-
     border: none;
-
     background: #16a34a;
-
     color: white;
-
     padding: 12px;
-
     border-radius: 8px;
-
     font-size: 14px;
-
     font-weight: bold;
-
     cursor: pointer;
 }
 
-.add-member-btn:active {
-    background: #15803d;
-}
-
-
-/* =========================
-   회원 없음
-========================= */
-
 .empty-message {
     text-align: center;
-
     padding: 25px 10px;
-
     color: #94a3b8;
-
     font-size: 14px;
 }
 
 
 /* =========================
-   휴대폰 화면
+   모바일
 ========================= */
 
 @media (max-width: 600px) {
@@ -401,9 +359,7 @@ h1 {
     .action-btn {
         font-size: 12px;
     }
-
 }
-
 </style>
 </head>
 
@@ -412,16 +368,11 @@ h1 {
 
 <div class="container">
 
-
-    <!-- =========================
-         메인 화면
-    ========================== -->
+    <!-- 메인 화면 -->
 
     <div id="page-main" class="page active">
 
-        <h1>
-            📚 모임별 전화번호부
-        </h1>
+        <h1>📚 모임별 전화번호부</h1>
 
         <p style="
             text-align:center;
@@ -432,9 +383,7 @@ h1 {
             확인하고 싶은 모임을 누르세요.
         </p>
 
-
         <div id="group-list"></div>
-
 
         <button
             type="button"
@@ -447,16 +396,11 @@ h1 {
     </div>
 
 
-
-    <!-- =========================
-         회원 상세 화면
-    ========================== -->
+    <!-- 회원 상세 화면 -->
 
     <div id="page-detail" class="page">
 
-
         <div class="top-row">
-
 
             <button
                 type="button"
@@ -466,30 +410,24 @@ h1 {
                 ⬅ 모임 목록
             </button>
 
-
             <span class="save-text">
                 ✓ 자동 저장
             </span>
 
-
         </div>
-
 
         <h1 id="group-title">
             회원 명단
         </h1>
 
 
-
-        <!-- 검색 -->
+        <!-- 검색창 -->
 
         <div class="search-box">
-
 
             <span class="search-icon">
                 🔍
             </span>
-
 
             <input
                 type="text"
@@ -498,7 +436,6 @@ h1 {
                 placeholder="이름, 전화번호, 메모 검색"
                 oninput="searchMembers()"
             >
-
 
             <button
                 type="button"
@@ -509,7 +446,6 @@ h1 {
                 ×
             </button>
 
-
         </div>
 
 
@@ -519,14 +455,10 @@ h1 {
         ></div>
 
 
-
-        <!-- 회원 목록 -->
-
         <div
             id="member-list"
             class="member-list"
         ></div>
-
 
 
         <button
@@ -537,15 +469,12 @@ h1 {
             ＋ 회원 추가
         </button>
 
-
     </div>
 
 </div>
 
 
-
 <script>
-
 
 /* =========================
    기본 데이터
@@ -553,80 +482,52 @@ h1 {
 
 const defaultData = {
 
-
     '독서모임': {
-
         icon: '📖',
-
         desc: '매월 첫주 도서 토론',
-
         members: [
-
             {
                 name: '김철수',
                 phone: '010-1234-5678',
                 memo: '총무'
             },
-
             {
                 name: '이영희',
                 phone: '010-9876-5432',
                 memo: '회원'
             }
-
         ]
-
     },
 
-
-
     '동창회': {
-
         icon: '🎓',
-
         desc: '연 2회 정기 모임',
-
         members: [
-
             {
                 name: '박민수',
                 phone: '010-5555-4444',
                 memo: '회장'
             }
-
         ]
-
     },
 
-
-
     '등산모임': {
-
         icon: '⛰️',
-
         desc: '주말 산행 및 건강 관리',
-
         members: []
-
     }
-
 
 };
 
 
-
 /* =========================
-   저장된 데이터 불러오기
+   저장 데이터 불러오기
 ========================= */
 
 let savedData =
-    localStorage.getItem(
-        'phoneBookDataV2'
-    );
-
+    localStorage.getItem('phoneBookDataV2');
 
 let groupData;
-
 
 try {
 
@@ -637,16 +538,12 @@ try {
 
 } catch (error) {
 
-    groupData =
-        defaultData;
+    groupData = defaultData;
 
 }
 
-
 let currentGroup = '';
-
 let currentSearch = '';
-
 
 
 /* =========================
@@ -656,57 +553,29 @@ let currentSearch = '';
 function saveData() {
 
     localStorage.setItem(
-
         'phoneBookDataV2',
-
         JSON.stringify(groupData)
-
     );
 
 }
 
 
-
 /* =========================
-   모임 목록 표시
+   모임 목록
 ========================= */
 
 function loadGroupList() {
 
-
     const list =
-        document.getElementById(
-            'group-list'
-        );
-
+        document.getElementById('group-list');
 
     list.innerHTML = '';
 
-
-
     Object.keys(groupData).forEach(
-
         groupName => {
-
 
             const group =
                 groupData[groupName];
-
-
-            const button =
-                document.createElement(
-                    'button'
-                );
-
-
-            button.type =
-                'button';
-
-
-            button.className =
-                'group-link';
-
-
 
             const memberCount =
                 group.members
@@ -714,130 +583,165 @@ function loadGroupList() {
                 : 0;
 
 
+            const card =
+                document.createElement('div');
 
-            button.innerHTML = `
+            card.className =
+                'group-card';
+
+
+            /* 모임 열기 */
+
+            const openButton =
+                document.createElement('button');
+
+            openButton.type =
+                'button';
+
+            openButton.className =
+                'group-open';
+
+            openButton.innerHTML = `
 
                 <div class="group-info">
 
                     <div class="group-name">
-
-                        ${escapeHtml(
-                            group.icon || '👥'
-                        )}
-
-                        ${escapeHtml(
-                            groupName
-                        )}
-
+                        ${escapeHtml(group.icon || '👥')}
+                        ${escapeHtml(groupName)}
                     </div>
 
-
                     <div class="group-desc">
-
-                        ${escapeHtml(
-                            group.desc || '회원 모임'
-                        )}
-
+                        ${escapeHtml(group.desc || '회원 모임')}
                         · 회원 ${memberCount}명
-
                     </div>
 
                 </div>
 
-
                 <div class="group-action">
-
                     열기 ➡
-
                 </div>
 
             `;
 
-
-
-            button.onclick =
+            openButton.onclick =
                 function () {
 
-                    openGroup(
-                        groupName
-                    );
+                    openGroup(groupName);
 
                 };
 
 
+            /* 관리 버튼 */
 
-            list.appendChild(
-                button
+            const manage =
+                document.createElement('div');
+
+            manage.className =
+                'group-manage';
+
+
+            const renameButton =
+                document.createElement('button');
+
+            renameButton.type =
+                'button';
+
+            renameButton.className =
+                'rename-group-btn';
+
+            renameButton.innerHTML =
+                '✏️ 이름 변경';
+
+            renameButton.onclick =
+                function () {
+
+                    renameGroup(groupName);
+
+                };
+
+
+            const deleteButton =
+                document.createElement('button');
+
+            deleteButton.type =
+                'button';
+
+            deleteButton.className =
+                'delete-group-btn';
+
+            deleteButton.innerHTML =
+                '🗑 모임 삭제';
+
+            deleteButton.onclick =
+                function () {
+
+                    deleteGroup(groupName);
+
+                };
+
+
+            manage.appendChild(
+                renameButton
+            );
+
+            manage.appendChild(
+                deleteButton
             );
 
 
-        }
+            card.appendChild(
+                openButton
+            );
 
+            card.appendChild(
+                manage
+            );
+
+
+            list.appendChild(
+                card
+            );
+
+        }
     );
 
 }
-
 
 
 /* =========================
    모임 열기
 ========================= */
 
-function openGroup(
-    groupName
-) {
-
+function openGroup(groupName) {
 
     currentGroup =
         groupName;
 
-
     currentSearch =
         '';
 
-
-
     document.getElementById(
         'search-input'
-    ).value =
-        '';
-
-
+    ).value = '';
 
     document.getElementById(
         'clear-search'
-    ).style.display =
-        'none';
-
-
+    ).style.display = 'none';
 
     document.getElementById(
         'group-title'
     ).innerText =
-        groupName +
-        ' 회원 명단';
-
-
+        groupName + ' 회원 명단';
 
     document.getElementById(
         'page-main'
-    ).classList.remove(
-        'active'
-    );
-
-
+    ).classList.remove('active');
 
     document.getElementById(
         'page-detail'
-    ).classList.add(
-        'active'
-    );
-
-
+    ).classList.add('active');
 
     loadMembers();
-
-
 
     window.scrollTo({
         top: 0,
@@ -847,42 +751,24 @@ function openGroup(
 }
 
 
-
 /* =========================
-   모임 목록으로
+   목록으로
 ========================= */
 
 function goBack() {
 
-
     document.getElementById(
         'page-detail'
-    ).classList.remove(
-        'active'
-    );
-
-
+    ).classList.remove('active');
 
     document.getElementById(
         'page-main'
-    ).classList.add(
-        'active'
-    );
+    ).classList.add('active');
 
-
-
-    currentGroup =
-        '';
-
-
-    currentSearch =
-        '';
-
-
+    currentGroup = '';
+    currentSearch = '';
 
     loadGroupList();
-
-
 
     window.scrollTo({
         top: 0,
@@ -892,46 +778,172 @@ function goBack() {
 }
 
 
+/* =========================
+   모임 이름 변경
+========================= */
+
+function renameGroup(oldName) {
+
+    const newName =
+        prompt(
+            '새로운 모임 이름을 입력해주세요.',
+            oldName
+        );
+
+    if (newName === null) {
+        return;
+    }
+
+    const cleanName =
+        newName.trim();
+
+    if (!cleanName) {
+
+        alert(
+            '모임 이름을 입력해주세요.'
+        );
+
+        return;
+    }
+
+
+    if (cleanName === oldName) {
+        return;
+    }
+
+
+    if (groupData[cleanName]) {
+
+        alert(
+            '이미 같은 이름의 모임이 있습니다.'
+        );
+
+        return;
+    }
+
+
+    /* 기존 회원정보 그대로 이동 */
+
+    const oldGroup =
+        groupData[oldName];
+
+
+    const newData = {};
+
+
+    Object.keys(groupData).forEach(
+        name => {
+
+            if (name === oldName) {
+
+                newData[cleanName] =
+                    oldGroup;
+
+            } else {
+
+                newData[name] =
+                    groupData[name];
+
+            }
+
+        }
+    );
+
+
+    groupData =
+        newData;
+
+
+    saveData();
+
+    loadGroupList();
+
+
+    alert(
+        '모임 이름이 변경되었습니다.'
+    );
+
+}
+
 
 /* =========================
-   회원 목록 표시
+   모임 삭제
+========================= */
+
+function deleteGroup(groupName) {
+
+    const memberCount =
+        groupData[groupName].members
+        ? groupData[groupName].members.length
+        : 0;
+
+
+    const message =
+
+        groupName +
+        ' 모임과 등록된 회원 ' +
+        memberCount +
+        '명의 정보를 모두 삭제하시겠습니까?';
+
+
+    if (!confirm(message)) {
+        return;
+    }
+
+
+    /* 한 번 더 확인 */
+
+    const finalConfirm =
+        confirm(
+            '삭제한 모임은 복구하기 어렵습니다.\n정말 삭제하시겠습니까?'
+        );
+
+
+    if (!finalConfirm) {
+        return;
+    }
+
+
+    delete groupData[groupName];
+
+
+    saveData();
+
+    loadGroupList();
+
+}
+
+
+/* =========================
+   회원 목록
 ========================= */
 
 function loadMembers() {
-
 
     const list =
         document.getElementById(
             'member-list'
         );
 
-
     const resultText =
         document.getElementById(
             'search-result'
         );
 
-
-    list.innerHTML =
-        '';
-
+    list.innerHTML = '';
 
 
     if (
         !currentGroup ||
         !groupData[currentGroup]
     ) {
-
         return;
-
     }
-
 
 
     const members =
         groupData[currentGroup]
             .members || [];
-
 
 
     const keyword =
@@ -940,269 +952,167 @@ function loadMembers() {
             .toLowerCase();
 
 
-
     let filteredMembers =
         [];
 
 
-
     members.forEach(
-
         (member, originalIndex) => {
 
-
             const searchableText =
-
                 (
-                    (member.name || '')
-                    + ' ' +
-                    (member.phone || '')
-                    + ' ' +
+                    (member.name || '') +
+                    ' ' +
+                    (member.phone || '') +
+                    ' ' +
                     (member.memo || '')
-                )
-                .toLowerCase();
-
+                ).toLowerCase();
 
 
             if (
                 !keyword ||
-                searchableText.includes(
-                    keyword
-                )
+                searchableText.includes(keyword)
             ) {
-
 
                 filteredMembers.push({
 
-                    member:
-                        member,
-
-                    index:
-                        originalIndex
+                    member: member,
+                    index: originalIndex
 
                 });
 
-
             }
 
-
         }
-
     );
-
 
 
     if (keyword) {
 
-
         resultText.innerText =
-
             '검색 결과 ' +
             filteredMembers.length +
             '명';
 
-
     } else {
 
-
         resultText.innerText =
-
             '전체 회원 ' +
             members.length +
             '명';
 
-
     }
 
 
-
-    if (
-        filteredMembers.length === 0
-    ) {
-
+    if (filteredMembers.length === 0) {
 
         if (keyword) {
 
-
             list.innerHTML = `
-
                 <div class="empty-message">
-
                     🔍 검색된 회원이 없습니다.
-
                 </div>
-
             `;
-
 
         } else {
 
-
             list.innerHTML = `
-
                 <div class="empty-message">
-
-                    등록된 회원이 없습니다.
-
-                    <br><br>
-
+                    등록된 회원이 없습니다.<br><br>
                     아래의 ＋ 회원 추가를 눌러주세요.
-
                 </div>
-
             `;
-
 
         }
 
-
         return;
-
     }
 
 
-
     filteredMembers.forEach(
-
         item => {
-
 
             const member =
                 item.member;
-
 
             const index =
                 item.index;
 
 
-
             const card =
-                document.createElement(
-                    'div'
-                );
-
+                document.createElement('div');
 
             card.className =
                 'member-card';
 
 
-
             card.innerHTML = `
-
 
                 <div class="member-top">
 
-
                     <input
                         type="text"
-                        value="${escapeHtml(
-                            member.name || ''
-                        )}"
+                        value="${escapeHtml(member.name || '')}"
                         placeholder="이름"
-                        oninput="updateMember(
-                            ${index},
-                            'name',
-                            this.value
-                        )"
+                        oninput="updateMember(${index}, 'name', this.value)"
                     >
-
 
                     <input
                         type="tel"
-                        value="${escapeHtml(
-                            member.phone || ''
-                        )}"
+                        value="${escapeHtml(member.phone || '')}"
                         placeholder="010-0000-0000"
-                        oninput="updateMember(
-                            ${index},
-                            'phone',
-                            this.value
-                        )"
+                        oninput="updateMember(${index}, 'phone', this.value)"
                     >
 
-
                 </div>
-
 
 
                 <input
                     class="memo-input"
                     type="text"
-                    value="${escapeHtml(
-                        member.memo || ''
-                    )}"
+                    value="${escapeHtml(member.memo || '')}"
                     placeholder="메모"
-                    oninput="updateMember(
-                        ${index},
-                        'memo',
-                        this.value
-                    )"
+                    oninput="updateMember(${index}, 'memo', this.value)"
                 >
-
 
 
                 <div class="member-actions">
 
-
                     <button
                         type="button"
                         class="action-btn call-btn"
-                        onclick="callPhone(
-                            ${index}
-                        )"
+                        onclick="callPhone(${index})"
                     >
-
                         📞 전화
-
                     </button>
-
-
 
                     <button
                         type="button"
                         class="action-btn sms-btn"
-                        onclick="sendSMS(
-                            ${index}
-                        )"
+                        onclick="sendSMS(${index})"
                     >
-
                         💬 문자
-
                     </button>
-
-
 
                     <button
                         type="button"
                         class="action-btn delete-btn"
-                        onclick="deleteMember(
-                            ${index}
-                        )"
+                        onclick="deleteMember(${index})"
                     >
-
                         🗑 삭제
-
                     </button>
 
-
                 </div>
-
 
             `;
 
 
-
-            list.appendChild(
-                card
-            );
-
+            list.appendChild(card);
 
         }
-
     );
 
 }
-
 
 
 /* =========================
@@ -1211,12 +1121,10 @@ function loadMembers() {
 
 function searchMembers() {
 
-
     const input =
         document.getElementById(
             'search-input'
         );
-
 
     const clearButton =
         document.getElementById(
@@ -1224,36 +1132,26 @@ function searchMembers() {
         );
 
 
-
     currentSearch =
         input.value;
 
 
-
-    if (
-        currentSearch.trim()
-    ) {
-
+    if (currentSearch.trim()) {
 
         clearButton.style.display =
             'block';
 
-
     } else {
-
 
         clearButton.style.display =
             'none';
 
-
     }
-
 
 
     loadMembers();
 
 }
-
 
 
 /* =========================
@@ -1262,41 +1160,28 @@ function searchMembers() {
 
 function clearSearch() {
 
-
     const input =
         document.getElementById(
             'search-input'
         );
 
+    input.value = '';
 
-    input.value =
-        '';
-
-
-    currentSearch =
-        '';
-
-
+    currentSearch = '';
 
     document.getElementById(
         'clear-search'
-    ).style.display =
-        'none';
-
-
+    ).style.display = 'none';
 
     loadMembers();
-
-
 
     input.focus();
 
 }
 
 
-
 /* =========================
-   회원정보 수정
+   회원 수정
 ========================= */
 
 function updateMember(
@@ -1305,24 +1190,18 @@ function updateMember(
     value
 ) {
 
-
     if (
         !groupData[currentGroup] ||
         !groupData[currentGroup]
             .members[index]
     ) {
-
         return;
-
     }
-
 
 
     groupData[currentGroup]
         .members[index][field]
-        =
-        value;
-
+        = value;
 
 
     saveData();
@@ -1330,38 +1209,26 @@ function updateMember(
 }
 
 
-
 /* =========================
-   전화 걸기
+   전화
 ========================= */
 
-function callPhone(
-    index
-) {
-
-
-    const member =
-        groupData[currentGroup]
-            .members[index];
-
+function callPhone(index) {
 
     const phone =
-        member.phone;
-
+        groupData[currentGroup]
+            .members[index]
+            .phone;
 
 
     if (!phone) {
-
 
         alert(
             '전화번호를 먼저 입력해주세요.'
         );
 
-
         return;
-
     }
-
 
 
     const cleanPhone =
@@ -1371,46 +1238,32 @@ function callPhone(
         );
 
 
-
     window.location.href =
-        'tel:' +
-        cleanPhone;
+        'tel:' + cleanPhone;
 
 }
 
 
-
 /* =========================
-   문자 보내기
+   문자
 ========================= */
 
-function sendSMS(
-    index
-) {
-
-
-    const member =
-        groupData[currentGroup]
-            .members[index];
-
+function sendSMS(index) {
 
     const phone =
-        member.phone;
-
+        groupData[currentGroup]
+            .members[index]
+            .phone;
 
 
     if (!phone) {
-
 
         alert(
             '전화번호를 먼저 입력해주세요.'
         );
 
-
         return;
-
     }
-
 
 
     const cleanPhone =
@@ -1420,13 +1273,10 @@ function sendSMS(
         );
 
 
-
     window.location.href =
-        'sms:' +
-        cleanPhone;
+        'sms:' + cleanPhone;
 
 }
-
 
 
 /* =========================
@@ -1435,16 +1285,12 @@ function sendSMS(
 
 function addMember() {
 
-
     if (
         !currentGroup ||
         !groupData[currentGroup]
     ) {
-
         return;
-
     }
-
 
 
     groupData[currentGroup]
@@ -1452,46 +1298,33 @@ function addMember() {
         .push({
 
             name: '',
-
             phone: '',
-
             memo: ''
 
         });
 
 
-
     saveData();
 
 
-
-    currentSearch =
-        '';
-
+    currentSearch = '';
 
 
     document.getElementById(
         'search-input'
-    ).value =
-        '';
-
+    ).value = '';
 
 
     document.getElementById(
         'clear-search'
-    ).style.display =
-        'none';
-
+    ).style.display = 'none';
 
 
     loadMembers();
 
 
-
     setTimeout(
-
         function () {
-
 
             const cards =
                 document.querySelectorAll(
@@ -1499,17 +1332,12 @@ function addMember() {
                 );
 
 
-            if (
-                cards.length > 0
-            ) {
-
+            if (cards.length > 0) {
 
                 const lastCard =
-
                     cards[
                         cards.length - 1
                     ];
-
 
 
                 const input =
@@ -1519,106 +1347,70 @@ function addMember() {
 
 
                 if (input) {
-
                     input.focus();
-
                 }
 
 
-
                 lastCard.scrollIntoView({
-
-                    behavior:
-                        'smooth',
-
-                    block:
-                        'center'
-
+                    behavior: 'smooth',
+                    block: 'center'
                 });
-
 
             }
 
-
         },
-
         50
-
     );
 
 }
-
 
 
 /* =========================
    회원 삭제
 ========================= */
 
-function deleteMember(
-    index
-) {
-
+function deleteMember(index) {
 
     const member =
         groupData[currentGroup]
             .members[index];
 
 
-
     let message =
         '이 회원을 삭제하시겠습니까?';
 
 
-
-    if (
-        member.name
-    ) {
-
+    if (member.name) {
 
         message =
             member.name +
             ' 회원을 삭제하시겠습니까?';
 
-
     }
 
 
-
-    if (
-        !confirm(message)
-    ) {
-
+    if (!confirm(message)) {
         return;
-
     }
-
 
 
     groupData[currentGroup]
         .members
-        .splice(
-            index,
-            1
-        );
-
+        .splice(index, 1);
 
 
     saveData();
-
-
 
     loadMembers();
 
 }
 
 
-
 /* =========================
-   새로운 모임 추가
+   새 모임 추가
 ========================= */
 
 function addGroup() {
-
 
     const groupName =
         prompt(
@@ -1626,42 +1418,28 @@ function addGroup() {
         );
 
 
-
     if (!groupName) {
-
         return;
-
     }
-
 
 
     const cleanName =
         groupName.trim();
 
 
-
     if (!cleanName) {
-
         return;
-
     }
 
 
-
-    if (
-        groupData[cleanName]
-    ) {
-
+    if (groupData[cleanName]) {
 
         alert(
             '이미 같은 이름의 모임이 있습니다.'
         );
 
-
         return;
-
     }
-
 
 
     const desc =
@@ -1670,38 +1448,23 @@ function addGroup() {
         );
 
 
-
     groupData[cleanName] = {
 
-
-        icon:
-            '👥',
-
+        icon: '👥',
 
         desc:
-
-            desc &&
-            desc.trim()
-
+            desc && desc.trim()
             ? desc.trim()
-
             : '회원 모임',
 
-
-        members:
-            []
-
+        members: []
 
     };
 
 
-
     saveData();
 
-
-
     loadGroupList();
-
 
 
     alert(
@@ -1712,48 +1475,26 @@ function addGroup() {
 }
 
 
-
 /* =========================
    특수문자 보호
 ========================= */
 
-function escapeHtml(
-    text
-) {
-
+function escapeHtml(text) {
 
     return String(text)
-
-        .replace(
-            /&/g,
-            '&amp;'
-        )
-
-        .replace(
-            /"/g,
-            '&quot;'
-        )
-
-        .replace(
-            /</g,
-            '&lt;'
-        )
-
-        .replace(
-            />/g,
-            '&gt;'
-        );
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 
 }
 
 
-
 /* =========================
-   처음 화면 실행
+   시작
 ========================= */
 
 loadGroupList();
-
 
 </script>
 
