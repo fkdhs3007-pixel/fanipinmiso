@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지출내역서</title>
+<style>
+• { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Malgun Gothic', 'Pretendard', sans-serif; background-color: #f4f6f9; color: #333; padding: 8px; }
+.container { width: 100%; max-width: 500px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); padding: 12px 8px; }
+
+.header-area { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-bottom: 8px; }
+h1 { color: #2c3e50; font-size: 18px; font-weight: bold; }
+
+.header-btns { display: flex; gap: 4px; }
+.btn-top { border: 1px solid #ced4da; font-size: 11px; padding: 4px 7px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-pwd { background-color: #f1f3f5; color: #495057; }
+.btn-backup { background-color: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+.btn-restore { background-color: #e3f2fd; color: #1565c0; border-color: #90caf9; }
+.btn-reset { background-color: #ffebee; color: #c62828; border-color: #ef9a9a; }
+
+.form-container { background-color: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+.form-group { display: flex; flex-direction: column; margin-bottom: 8px; }
+.form-group label { font-size: 12px; font-weight: bold; color: #555; margin-bottom: 3px; }
+.form-group input { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; width: 100%; }
+
+.btn-group { display: flex; gap: 6px; }
+.btn-submit { flex: 1; background-color: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+.btn-cancel { display: none; background-color: #7f8c8d; color: white; border: none; padding: 10px 14px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+
+.summary-card { background: #eafaf1; border: 1px solid #d4efdf; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.summary-title { font-size: 13px; font-weight: bold; color: #1e8449; }
+.summary-amount { font-size: 17px; font-weight: bold; color: #1e8449; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 5px; table-layout: fixed; }
+th, td { padding: 6px 1px; border-bottom: 1px solid #eee; font-size: 11px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+th { background-color: #f1f3f5; color: #2c3e50; font-weight: bold; }
+
+.col-date { width: 22%; font-size: 11px; color: #444; }
+.col-item { width: 20%; text-align: left; padding-left: 2px; font-weight: 600; }
+.col-amount { width: 22%; text-align: right; padding-right: 2px; font-weight: bold; color: #2c3e50; }
+.col-note { width: 16%; color: #666; }
+.col-action { width: 20%; }
+
+.empty-msg { color: #888; padding: 15px 0; text-align: center; }
+.btn-edit { background-color: #3498db; color: white; border: none; padding: 3px 5px; font-size: 10px; border-radius: 4px; cursor: pointer; }
+.btn-delete { background-color: #e74c3c; color: white; border: none; padding: 3px 5px; font-size: 10px; border-radius: 4px; cursor: pointer; }
+
+/* 잠금 화면 스타일 */
+.lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+.lock-card { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-align: center; width: 90%; max-width: 320px; }
+.lock-card h2 { font-size: 18px; color: #2c3e50; margin-bottom: 10px; }
+.lock-card input { width: 100%; padding: 10px; font-size: 18px; letter-spacing: 5px; text-align: center; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 12px; }
+.lock-card button { width: 100%; background-color: #2c3e50; color: white; border: none; padding: 10px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+.btn-force-pwd { margin-top: 10px; background-color: #f1f3f5; color: #e74c3c; border: 1px solid #ffc9c9; font-size: 11px; padding: 6px; border-radius: 4px; width: 100%; cursor: pointer; }
+
+/* 💡 공통 모달 (삭제 & 초기화) 스타일 */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 10000; }
+.modal-card { background: #ffffff; padding: 24px 20px 20px 20px; border-radius: 16px; width: 90%; max-width: 340px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15); animation: fadeIn 0.2s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.modal-title { font-size: 18px; font-weight: bold; color: #eb4d4b; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.modal-desc { font-size: 13px; color: #666; margin-bottom: 16px; }
+.modal-info-box { background: #f8f9fa; border-radius: 10px; padding: 14px 16px; text-align: left; margin-bottom: 20px; border: 1px solid #f1f3f5; }
+.modal-info-box p { font-size: 13px; color: #444; margin-bottom: 6px; }
+.modal-info-box p:last-child { margin-bottom: 0; }
+.modal-info-box strong { color: #2c3e50; }
+.modal-btn-group { display: flex; gap: 10px; }
+.btn-modal-cancel { flex: 1; background-color: #8395a7; color: white; border: none; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+.btn-modal-delete { flex: 1; background-color: #ff5252; color: white; border: none; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- 비밀번호 잠금 화면 -->
+<div id="lock-screen" class="lock-screen" style="display: none;">
+<div class="lock-card">
+<h2 id="lock-title">🔒 비밀번호 입력</h2>
+<p id="lock-desc" style="font-size:12px; color:#666; margin-bottom:15px;">지출내역서를 보려면 비밀번호를 입력하세요.</p>
+<form id="pwd-form" onsubmit="return false;">
+<input type="password" id="pwd-input" maxlength="4" placeholder="••••" inputmode="numeric">
+<button type="submit" id="btn-unlock">확인</button>
+</form>
+<button class="btn-force-pwd" id="btn-reset-pwd">🔑 비밀번호가 안 맞을 때 (새로 설정)</button>
+</div>
+</div>
+
+<!-- 💡 개별 삭제 모달 -->
+<div id="delete-modal" class="modal-overlay">
+<div class="modal-card">
+<div class="modal-title">⚠️ 지출 내역 삭제</div>
+<div class="modal-desc">정말로 이 내역을 삭제하시겠습니까?</div>
+<div class="modal-info-box">
+<p>• <strong>날짜:</strong> <span id="modal-date"></span></p>
+<p>• <strong>항목:</strong> <span id="modal-item"></span></p>
+<p>• <strong>금액:</strong> <span id="modal-amount"></span></p>
+</div>
+<div class="modal-btn-group">
+<button class="btn-modal-cancel" id="btn-modal-cancel">취소</button>
+<button class="btn-modal-delete" id="btn-modal-confirm">삭제</button>
+</div>
+</div>
+</div>
+
+<!-- 💡 전체 초기화 커스텀 모달 -->
+<div id="reset-modal" class="modal-overlay">
+<div class="modal-card">
+<div class="modal-title">⚠️ 전체 내역 초기화</div>
+<div class="modal-desc">정말로 모든 내역을 삭제하시겠습니까?</div>
+<div class="modal-info-box">
+<p>• <strong>총 기록 건수:</strong> <span id="reset-modal-count">0건</span></p>
+<p>• <strong>현재 총 지출:</strong> <span id="reset-modal-total">0원</span></p>
+<p style="color:#e74c3c; margin-top:8px; font-weight:bold;">※ 삭제된 전체 데이터는 복구할 수 없습니다.</p>
+</div>
+<div class="modal-btn-group">
+<button class="btn-modal-cancel" id="btn-reset-cancel">취소</button>
+<button class="btn-modal-delete" id="btn-reset-confirm">초기화</button>
+</div>
+</div>
+</div>
+
+<input type="file" id="file-input" style="display: none;" accept=".txt,.json">
+
+<div class="container">
+<div class="header-area">
+<h1>📝 지출내역서</h1>
+<div class="header-btns">
+<button class="btn-top btn-backup" id="btn-backup">💾 백업</button>
+<button class="btn-top btn-restore" id="btn-restore">📂 복구</button>
+<button class="btn-top btn-reset" id="btn-reset">🔄 초기화</button>
+<button class="btn-top btn-pwd" id="btn-pwd">⚙️</button>
+</div>
+</div>
+
+<div class="form-container">
+<div class="form-group">
+<label for="input-date">날짜</label>
+<input type="date" id="input-date">
+</div>
+<div class="form-group">
+<label for="input-item">지출 내역</label>
+<input type="text" id="input-item" placeholder="지출 품목">
+</div>
+<div class="form-group">
+<label for="input-amount">금액 (원)</label>
+<input type="number" id="input-amount" placeholder="예: 1000">
+</div>
+<div class="form-group">
+<label for="input-note">비고 (간단 메모)</label>
+<input type="text" id="input-note">
+</div>
+<div class="btn-group">
+<button class="btn-submit" id="btn-add">지출 추가하기</button>
+<button class="btn-cancel" id="btn-cancel">취소</button>
+</div>
+</div>
+
+<div class="summary-card">
+<span class="summary-title">총 지출 합계</span>
+<span class="summary-amount" id="total-amount">0 원</span>
+</div>
+
+<table>
+<thead>
+<tr>
+<th class="col-date">날짜</th>
+<th class="col-item">지출 내역</th>
+<th class="col-amount">금액</th>
+<th class="col-note">비고</th>
+<th class="col-action">관리</th>
+</tr>
+</thead>
+<tbody id="expense-list"></tbody>
+</table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+var dateInput = document.getElementById('input-date');
+var itemInput = document.getElementById('input-item');
+var amountInput = document.getElementById('input-amount');
+var noteInput = document.getElementById('input-note');
+var btnAdd = document.getElementById('btn-add');
+var btnCancel = document.getElementById('btn-cancel');
+var tbody = document.getElementById('expense-list');
+var totalAmountEl = document.getElementById('total-amount');
+
+var lockScreen = document.getElementById('lock-screen');
+var lockTitle = document.getElementById('lock-title');
+var lockDesc = document.getElementById('lock-desc');
+var pwdInput = document.getElementById('pwd-input');
+var pwdForm = document.getElementById('pwd-form');
+var btnUnlock = document.getElementById('btn-unlock');
+var btnPwd = document.getElementById('btn-pwd');
+var btnResetPwd = document.getElementById('btn-reset-pwd');
+
+// 개별 삭제 모달
+var deleteModal = document.getElementById('delete-modal');
+var modalDate = document.getElementById('modal-date');
+var modalItem = document.getElementById('modal-item');
+var modalAmount = document.getElementById('modal-amount');
+var btnModalCancel = document.getElementById('btn-modal-cancel');
+var btnModalConfirm = document.getElementById('btn-modal-confirm');
+var deleteTargetIndex = -1;
+
+// 💡 전체 초기화 모달 엘리먼트
+var resetModal = document.getElementById('reset-modal');
+var resetModalCount = document.getElementById('reset-modal-count');
+var resetModalTotal = document.getElementById('reset-modal-total');
+var btnResetCancel = document.getElementById('btn-reset-cancel');
+var btnResetConfirm = document.getElementById('btn-reset-confirm');
+
+var btnBackup = document.getElementById('btn-backup');
+var btnRestore = document.getElementById('btn-restore');
+var btnReset = document.getElementById('btn-reset');
+var fileInput = document.getElementById('file-input');
+
+var KEY_DATA = 'expense_ledger_safe_v1';
+var KEY_PWD = 'expense_ledger_pwd_safe_v1';
+
+var editIndex = -1;
+var isSettingMode = false;
+
+function checkAuth() {
+var savedPwd = localStorage.getItem(KEY_PWD);
+if (!savedPwd) {
+isSettingMode = true;
+lockTitle.innerText = '🔐 비밀번호 최초 설정';
+lockDesc.innerText = '사용할 4자리 비밀번호를 입력해 주세요.';
+btnUnlock.innerText = '비밀번호 저장';
+btnResetPwd.style.display = 'none';
+lockScreen.style.display = 'flex';
+} else {
+isSettingMode = false;
+lockTitle.innerText = '🔒 잠김';
+lockDesc.innerText = '4자리 비밀번호를 입력하세요.';
+btnUnlock.innerText = '확인';
+btnResetPwd.style.display = 'block';
+lockScreen.style.display = 'flex';
+}
+setTimeout(function() { pwdInput.focus(); }, 100);
+}
+
+function handleUnlock() {
+var inputVal = pwdInput.value.trim();
+if (inputVal.length < 4) { alert('비밀번호 4자리를 정확히 입력해 주세요.'); return; }
+var savedPwd = localStorage.getItem(KEY_PWD);
+
+if (isSettingMode) {
+localStorage.setItem(KEY_PWD, inputVal);
+alert('비밀번호가 성공적으로 설정되었습니다.');
+lockScreen.style.display = 'none';
+pwdInput.value = '';
+} else {
+if (inputVal === savedPwd) {
+lockScreen.style.display = 'none';
+pwdInput.value = '';
+} else {
+alert('비밀번호가 일치하지 않습니다.');
+pwdInput.value = '';
+pwdInput.focus();
+}
+}
+}
+
+btnUnlock.addEventListener('click', handleUnlock);
+
+pwdForm.addEventListener('submit', function(e) {
+e.preventDefault();
+handleUnlock();
+});
+
+pwdInput.addEventListener('keydown', function(e) {
+if (e.key === 'Enter' || e.keyCode === 13) {
+e.preventDefault();
+handleUnlock();
+}
+});
+
+btnResetPwd.addEventListener('click', function() {
+localStorage.removeItem(KEY_PWD);
+alert('비밀번호가 초기화되었습니다. 새로 사용할 4자리 비밀번호를 입력해 주세요.');
+pwdInput.value = '';
+checkAuth();
+});
+
+btnPwd.addEventListener('click', function() {
+var savedPwd = localStorage.getItem(KEY_PWD);
+if (savedPwd) {
+var current = prompt('현재 비밀번호를 입력하세요:');
+if (current === savedPwd) {
+var newPwd = prompt('새 4자리 비밀번호 (해제하려면 빈칸 입력):');
+if (newPwd === null) return;
+newPwd = newPwd.trim();
+if (newPwd === '') {
+localStorage.removeItem(KEY_PWD);
+alert('비밀번호가 해제되었습니다.');
+} else if (newPwd.length === 4) {
+localStorage.setItem(KEY_PWD, newPwd);
+alert('비밀번호가 변경되었습니다.');
+} else {
+alert('4자리 숫자로 입력해 주세요.');
+}
+} else if (current !== null) { alert('비밀번호가 일치하지 않습니다.'); }
+} else { checkAuth(); }
+});
+
+dateInput.value = new Date().toISOString().substring(0, 10);
+
+var expenses = [];
+try {
+var saved = localStorage.getItem(KEY_DATA);
+if (saved) expenses = JSON.parse(saved);
+} catch (e) { expenses = []; }
+
+function resetForm() {
+editIndex = -1;
+dateInput.value = new Date().toISOString().substring(0, 10);
+itemInput.value = '';
+amountInput.value = '';
+noteInput.value = '';
+btnAdd.innerText = '지출 추가하기';
+btnAdd.style.backgroundColor = '#27ae60';
+btnCancel.style.display = 'none';
+}
+
+function updateView() {
+expenses.sort(function(a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
+try { localStorage.setItem(KEY_DATA, JSON.stringify(expenses)); } catch (e) {}
+
+tbody.innerHTML = '';
+var total = 0;
+
+if (expenses.length === 0) {
+tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">내역이 없습니다. 위에서 내역을 추가해 주세요.</td></tr>';
+} else {
+for (var i = 0; i < expenses.length; i++) {
+var item = expenses[i];
+total += Number(item.amount);
+var tr = document.createElement('tr');
+tr.innerHTML =
+'<td class="col-date">' + item.date + '</td>' +
+'<td class="col-item">' + item.item + '</td>' +
+'<td class="col-amount">' + Number(item.amount).toLocaleString() + '원</td>' +
+'<td class="col-note">' + (item.note || '-') + '</td>' +
+'<td class="col-action">' +
+'<button class="btn-edit" data-index="' + i + '">수정</button> ' +
+'<button class="btn-delete" data-index="' + i + '">삭제</button>' +
+'</td>';
+tbody.appendChild(tr);
+}
+}
+totalAmountEl.innerText = total.toLocaleString() + ' 원';
+}
+
+btnAdd.addEventListener('click', function() {
+var dateVal = dateInput.value;
+var itemVal = itemInput.value.trim();
+var amountVal = parseInt(amountInput.value, 10);
+var noteVal = noteInput.value.trim();
+
+if (!dateVal || !itemVal || isNaN(amountVal) || amountVal <= 0) {
+alert('모든 필수 항목을 입력해 주세요.');
+return;
+}
+
+var payload = { date: dateVal, item: itemVal, amount: amountVal, note: noteVal };
+if (editIndex > -1) expenses[editIndex] = payload;
+else expenses.push(payload);
+
+resetForm();
+updateView();
+});
+
+// 개별 삭제 모달 제어
+tbody.addEventListener('click', function(e) {
+var target = e.target;
+var idx = target.getAttribute('data-index');
+if (idx === null) return;
+idx = Number(idx);
+
+if (target.classList.contains('btn-delete')) {
+var targetItem = expenses[idx];
+deleteTargetIndex = idx;
+modalDate.innerText = targetItem.date;
+modalItem.innerText = targetItem.item;
+modalAmount.innerText = Number(targetItem.amount).toLocaleString() + '원';
+deleteModal.style.display = 'flex';
+}
+
+if (target.classList.contains('btn-edit')) {
+var targetItem = expenses[idx];
+editIndex = idx;
+dateInput.value = targetItem.date;
+itemInput.value = targetItem.item;
+amountInput.value = targetItem.amount;
+noteInput.value = targetItem.note || '';
+btnAdd.innerText = '지출 수정하기';
+btnAdd.style.backgroundColor = '#3498db';
+btnCancel.style.display = 'inline-block';
+}
+});
+
+btnModalCancel.addEventListener('click', function() {
+deleteModal.style.display = 'none';
+deleteTargetIndex = -1;
+});
+
+btnModalConfirm.addEventListener('click', function() {
+if (deleteTargetIndex > -1) {
+expenses.splice(deleteTargetIndex, 1);
+updateView();
+deleteModal.style.display = 'none';
+deleteTargetIndex = -1;
+}
+});
+
+btnCancel.addEventListener('click', resetForm);
+
+btnBackup.addEventListener('click', function() {
+if (expenses.length === 0) { alert('백업할 내역이 없습니다.'); return; }
+var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(expenses, null, 2));
+var dlAnchorElem = document.createElement('a');
+dlAnchorElem.setAttribute("href", dataStr);
+dlAnchorElem.setAttribute("download", "지출내역_백업_" + new Date().toISOString().substring(0, 10) + ".txt");
+dlAnchorElem.click();
+});
+
+btnRestore.addEventListener('click', function() { fileInput.click(); });
+fileInput.addEventListener('change', function(e) {
+var file = e.target.files[0];
+if (!file) return;
+var reader = new FileReader();
+reader.onload = function(e) {
+try {
+var imported = JSON.parse(e.target.result);
+if (Array.isArray(imported)) {
+expenses = imported;
+updateView();
+alert('백업 파일에서 성공적으로 복구되었습니다!');
+} else alert('올바른 백업 파일이 아닙니다.');
+} catch (err) { alert('파일을 읽는 중 오류가 발생했습니다.'); }
+};
+reader.readAsText(file);
+});
+
+// 💡 초기화 커스텀 모달 이벤트
+btnReset.addEventListener('click', function() {
+if (expenses.length === 0) {
+alert('삭제할 내역이 없습니다.');
+return;
+}
+var totalSum = expenses.reduce(function(sum, item) { return sum + Number(item.amount); }, 0);
+resetModalCount.innerText = expenses.length + '건';
+resetModalTotal.innerText = totalSum.toLocaleString() + '원';
+resetModal.style.display = 'flex';
+});
+
+btnResetCancel.addEventListener('click', function() {
+resetModal.style.display = 'none';
+});
+
+btnResetConfirm.addEventListener('click', function() {
+expenses = [];
+resetForm();
+updateView();
+resetModal.style.display = 'none';
+});
+
+checkAuth();
+updateView();
+});
+</script>
+</body>
+</html>
