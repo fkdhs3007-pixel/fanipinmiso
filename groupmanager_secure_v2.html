@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모임 종합관리</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9;--card:#fff;--line:#dfe5ec;--text:#334155;--muted:#718096;
+  --blue:#2563eb;--green:#16a34a;--red:#dc2626;--purple:#7c3aed;--cyan:#0891b2;--gray:#64748b;
+}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);margin:0;padding:8px;color:var(--text)}
+button,input,select,textarea{font-family:inherit}
+.container{max-width:820px;margin:0 auto;background:#fff;padding:16px;border-radius:18px;box-shadow:0 5px 18px rgba(0,0,0,.05);min-height:calc(100vh - 16px)}
+.page{display:none}.page.active{display:block}
+.main-header{text-align:center;padding:10px 0 16px}.main-title{margin:0;font-size:24px;color:#243447}
+
+/* 메인 모임 카드 */
+.group-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:11px;box-shadow:0 2px 6px rgba(0,0,0,.025)}
+.group-main{display:flex;align-items:center;width:100%}.group-open{flex:1;display:flex;align-items:center;min-width:0;border:0;background:transparent;padding:16px 10px 16px 14px;text-align:left;cursor:pointer}.group-info{min-width:0;flex:1}
+.group-name{display:flex;align-items:center;gap:8px;color:var(--blue);font-size:17px;font-weight:700}.group-icon{width:25px;height:25px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px;flex-shrink:0}.icon-1{background:#e6f0ff}.icon-2{background:#f0e9ff}.icon-3{background:#e6f7ee}.icon-4{background:#ffeaf2}.icon-5{background:#fff1df}
+.group-desc{margin-top:6px;margin-left:33px;color:var(--muted);font-size:13px}.menu-btn{width:40px;height:40px;margin-right:7px;border:0;border-radius:50%;background:transparent;font-size:22px;color:var(--gray);cursor:pointer}.menu-btn:active{background:#eef2f7}
+.group-menu{display:none;position:absolute;right:10px;top:56px;width:165px;background:#fff;border:1px solid #dce3ea;border-radius:11px;box-shadow:0 8px 25px rgba(0,0,0,.15);z-index:100;overflow:hidden}.group-menu.show{display:block}.group-menu button{display:block;width:100%;padding:12px 14px;border:0;border-bottom:1px solid #edf0f3;background:#fff;text-align:left;font-size:13px;cursor:pointer}.group-menu button:last-child{border-bottom:0}.group-menu .delete-menu{color:var(--red)}
+
+.bottom-tools{margin-top:16px}.primary-btn{width:100%;padding:14px;border:0;border-radius:11px;background:var(--purple);color:#fff;font-size:16px;font-weight:700;cursor:pointer}.settings-area{display:flex;justify-content:center;margin-top:11px}.settings-btn{width:42px;height:42px;border:1px solid #e2e8f0;border-radius:50%;background:#f8fafc;color:var(--gray);font-size:18px;cursor:pointer}
+
+/* 순서변경 */
+.reorder-panel{display:none;align-items:center;gap:5px;padding-right:9px}.reorder-mode .menu-btn{display:none}.reorder-mode .reorder-panel{display:flex}.move-btn{width:35px;height:35px;border:1px solid #d8dee7;border-radius:8px;background:#f8fafc;color:#475569;font-size:15px;font-weight:bold;cursor:pointer}.move-btn:disabled{opacity:.25}.reorder-help{display:none;text-align:center;margin-bottom:12px;padding:9px;background:#f5f3ff;border-radius:9px;color:#6d28d9;font-size:12px}.reorder-help.show{display:block}
+
+/* 상세 공통 */
+.detail-top{display:flex;justify-content:space-between;align-items:center}.back-btn{border:0;border-radius:8px;padding:9px 13px;background:var(--gray);color:#fff;font-size:13px;cursor:pointer}.save-text{color:var(--green);font-size:12px;font-weight:700}.detail-title{text-align:center;margin:18px 0 14px;color:#243447;font-size:21px}.tabbar{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px}.tab-btn{border:1px solid #dbe2ea;border-radius:9px;background:#f8fafc;padding:9px 2px;font-size:12px;color:#475569;cursor:pointer}.tab-btn.active{background:#eaf2ff;border-color:#b9d0ff;color:var(--blue);font-weight:700}.tab-panel{display:none}.tab-panel.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px}.section-title{font-size:16px;font-weight:700;color:#243447}.small-btn{border:0;border-radius:8px;padding:8px 11px;color:#fff;background:var(--blue);font-size:12px;font-weight:700;cursor:pointer}.small-btn.green{background:var(--green)}.small-btn.purple{background:var(--purple)}
+.empty{padding:25px 10px;text-align:center;color:#94a3b8;font-size:14px}
+
+/* 회원 */
+.search-box{position:relative;margin-bottom:10px}.search-input{width:100%;padding:12px 40px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;font-size:14px;outline:0}.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%)}.clear-search{display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);width:27px;height:27px;border:0;border-radius:50%;background:#e2e8f0;color:#475569}.search-result{margin:0 0 9px 3px;color:#64748b;font-size:12px}.member-list{display:flex;flex-direction:column;gap:9px}.member-card{padding:10px;border:1px solid #dbe2ea;border-radius:11px;background:#fff}.member-top{display:grid;grid-template-columns:1fr 1.45fr;gap:7px}.member-card input{width:100%;padding:9px;border:1px solid #d7dee8;border-radius:7px;font-size:14px;outline:0}.memo-input{margin-top:7px}.member-actions{display:flex;gap:6px;margin-top:8px}.action-btn{flex:1;border:0;border-radius:7px;padding:9px 4px;color:#fff;font-size:12px;cursor:pointer}.call-btn{background:var(--blue)}.sms-btn{background:var(--cyan)}.delete-btn{background:var(--red)}
+
+/* 일정 */
+.meeting-next{border:1px solid #dbeafe;background:#f8fbff;border-radius:12px;padding:12px;margin-bottom:10px}.meeting-next strong{color:var(--blue)}.meeting-card{border:1px solid #dbe2ea;border-radius:11px;padding:11px;margin-bottom:9px}.meeting-date{font-weight:700;color:#243447}.meeting-meta{margin-top:5px;font-size:13px;color:#64748b}.meeting-actions{display:flex;gap:6px;margin-top:9px}.mini-action{flex:1;border:1px solid #d8dee7;border-radius:7px;background:#f8fafc;padding:8px;font-size:12px;cursor:pointer}.mini-action.danger{color:var(--red);background:#fff7f7}
+
+/* 출석 */
+.attendance-select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;margin-bottom:10px}.attendance-row{display:flex;align-items:center;gap:8px;border-bottom:1px solid #edf0f3;padding:9px 2px}.attendance-row:last-child{border-bottom:0}.attendance-name{flex:1;font-weight:600}.status-btn{width:82px;border:0;border-radius:8px;padding:8px 4px;font-size:12px;font-weight:700;cursor:pointer}.status-unknown{background:#eef2f7;color:#64748b}.status-present{background:#dcfce7;color:#15803d}.status-absent{background:#fee2e2;color:#b91c1c}.attendance-summary{font-size:12px;color:#64748b;margin:0 0 10px}
+
+/* 회비 */
+.finance-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}.summary-box{border:1px solid #e2e8f0;border-radius:10px;padding:10px;text-align:center;background:#f8fafc}.summary-label{font-size:11px;color:#64748b}.summary-value{margin-top:4px;font-size:15px;font-weight:700;color:#243447}.fee-setting{display:flex;align-items:center;gap:8px;margin-bottom:10px}.fee-setting label{font-size:13px;font-weight:700}.fee-setting input{flex:1;min-width:0;padding:9px;border:1px solid #cbd5e1;border-radius:8px;text-align:right}.payment-row{display:grid;grid-template-columns:1fr 90px 76px;gap:7px;align-items:center;border-bottom:1px solid #edf0f3;padding:8px 0}.payment-row input{width:100%;padding:8px;border:1px solid #d7dee8;border-radius:7px;text-align:right}.pay-toggle{border:0;border-radius:8px;padding:8px 4px;font-size:12px;font-weight:700;cursor:pointer}.paid{background:#dcfce7;color:#15803d}.unpaid{background:#fee2e2;color:#b91c1c}.expense-card{display:grid;grid-template-columns:86px 1fr 88px 34px;gap:6px;align-items:center;border-bottom:1px solid #edf0f3;padding:8px 0;font-size:12px}.expense-del{border:0;background:#fff0f0;color:var(--red);border-radius:7px;height:30px;cursor:pointer}
+
+/* 메모 */
+.note-area{width:100%;min-height:300px;padding:13px;border:1px solid #cbd5e1;border-radius:11px;resize:vertical;font-size:14px;line-height:1.6;outline:0}.note-help{font-size:12px;color:#94a3b8;margin-top:7px}
+
+/* 설정 팝업 */
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:500;padding:20px;align-items:center;justify-content:center}.overlay.show{display:flex}.settings-box{width:100%;max-width:420px;background:#fff;border-radius:18px;padding:20px;box-shadow:0 15px 45px rgba(0,0,0,.2)}.settings-title{text-align:center;margin:0 0 17px;color:#243447;font-size:18px}.settings-menu-btn{width:100%;margin-bottom:9px;padding:13px;border:1px solid #dce3ea;border-radius:10px;background:#f8fafc;color:#475569;font-size:14px;font-weight:600;cursor:pointer}.settings-close-btn{width:100%;margin-top:5px;padding:12px;border:0;border-radius:10px;background:var(--gray);color:#fff;font-size:14px;font-weight:600;cursor:pointer}
+
+@media(max-width:600px){body{padding:5px}.container{padding:12px}.main-title{font-size:22px}.member-top{grid-template-columns:1fr}.tab-btn{font-size:11px;padding:9px 1px}.finance-summary{gap:5px}.summary-value{font-size:13px}.payment-row{grid-template-columns:1fr 82px 70px}.expense-card{grid-template-columns:78px 1fr 76px 32px}}
+
+
+/* =========================
+   보안 잠금 / 전화번호 가림
+========================= */
+.app-locked{filter:blur(8px);pointer-events:none;user-select:none}
+.lock-screen{display:none;position:fixed;inset:0;z-index:2000;background:linear-gradient(180deg,#f4f6f9 0%,#eef2f7 100%);padding:22px;align-items:center;justify-content:center}
+.lock-screen.show{display:flex}
+.lock-card{width:100%;max-width:420px;background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px 20px;box-shadow:0 18px 50px rgba(15,23,42,.14);text-align:center}
+.lock-icon{font-size:38px;margin-bottom:8px}.lock-title{margin:0;color:#243447;font-size:22px}.lock-desc{margin:9px 0 18px;color:#64748b;font-size:13px;line-height:1.55}
+.lock-input{width:100%;padding:13px 14px;margin-bottom:9px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;outline:none;background:#fff}
+.lock-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.lock-primary{width:100%;padding:13px;border:0;border-radius:10px;background:#2563eb;color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+.lock-secondary{width:100%;margin-top:8px;padding:11px;border:1px solid #d7dee8;border-radius:10px;background:#f8fafc;color:#475569;font-size:13px;font-weight:700;cursor:pointer}
+.hint-display{display:none;margin-top:9px;padding:10px 12px;border-radius:9px;background:#fff7ed;color:#9a3412;font-size:13px;line-height:1.5;text-align:left}
+.lock-error{min-height:20px;margin-top:10px;color:#dc2626;font-size:12px}.lock-note{margin-top:12px;color:#94a3b8;font-size:11px;line-height:1.5}
+.phone-wrap{display:flex;gap:6px;align-items:center}.phone-wrap input{flex:1;min-width:0}.phone-reveal-btn{flex-shrink:0;border:1px solid #d7dee8;border-radius:7px;background:#f8fafc;color:#475569;padding:9px 8px;font-size:11px;font-weight:700;cursor:pointer}
+.security-row{display:flex;align-items:center;gap:10px;margin:7px 0 12px;padding:10px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc}.security-row label{flex:1;font-size:13px;font-weight:700;color:#475569}.security-row select{padding:8px;border:1px solid #cbd5e1;border-radius:8px;background:#fff}
+.security-hint{margin:-1px 0 11px;color:#94a3b8;font-size:11px;line-height:1.45}.settings-menu-btn.warn{color:#b45309;background:#fffbeb;border-color:#fde68a}.settings-menu-btn.lock-now{color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
+
+</style>
+</head>
+<body>
+<div id="app-shell" class="container app-locked">
+  <div id="page-main" class="page active">
+    <div class="main-header"><h1 class="main-title">🗂️ 모임 종합관리</h1></div>
+    <div id="reorder-help" class="reorder-help"></div>
+    <div id="group-list"></div>
+    <div class="bottom-tools">
+      <button class="primary-btn" onclick="addGroup()">＋ 새로운 모임 추가</button>
+      <div class="settings-area"><button class="settings-btn" onclick="openSettings()">⚙️</button></div>
+    </div>
+  </div>
+
+  <div id="page-detail" class="page">
+    <div class="detail-top">
+      <button class="back-btn" onclick="goBack()">← 모임 목록</button>
+      <span class="save-text">✓ 자동 저장</span>
+    </div>
+    <h1 id="detail-title" class="detail-title">모임</h1>
+    <div class="tabbar">
+      <button class="tab-btn active" data-tab="members" onclick="openTab('members')">👥 회원</button>
+      <button class="tab-btn" data-tab="meetings" onclick="openTab('meetings')">📅 일정</button>
+      <button class="tab-btn" data-tab="attendance" onclick="openTab('attendance')">✅ 출석</button>
+      <button class="tab-btn" data-tab="finance" onclick="openTab('finance')">💰 회비</button>
+      <button class="tab-btn" data-tab="notes" onclick="openTab('notes')">📝 메모</button>
+    </div>
+
+    <section id="tab-members" class="tab-panel active">
+      <div class="section-head"><div class="section-title">회원관리</div><button class="small-btn green" onclick="addMember()">＋ 회원 추가</button></div>
+      <div class="search-box"><span class="search-icon">🔍</span><input id="member-search" class="search-input" placeholder="이름, 전화번호, 메모 검색" oninput="searchMembers()"><button id="clear-search" class="clear-search" onclick="clearMemberSearch()">×</button></div>
+      <div id="search-result" class="search-result"></div>
+      <div id="member-list" class="member-list"></div>
+    </section>
+
+    <section id="tab-meetings" class="tab-panel">
+      <div class="section-head"><div class="section-title">모임 일정</div><button class="small-btn" onclick="addMeeting()">＋ 일정 추가</button></div>
+      <div id="next-meeting"></div>
+      <div id="meeting-list"></div>
+    </section>
+
+    <section id="tab-attendance" class="tab-panel">
+      <div class="section-head"><div class="section-title">출석관리</div></div>
+      <select id="attendance-meeting" class="attendance-select" onchange="renderAttendance()"></select>
+      <div id="attendance-summary" class="attendance-summary"></div>
+      <div id="attendance-list"></div>
+    </section>
+
+    <section id="tab-finance" class="tab-panel">
+      <div class="section-head"><div class="section-title">회비관리</div></div>
+      <div id="finance-summary" class="finance-summary"></div>
+      <div class="fee-setting"><label>1인 회비</label><input id="fee-amount" type="number" min="0" step="1000" oninput="changeFeeAmount(this.value)" placeholder="0"></div>
+      <div id="payment-list"></div>
+      <div class="section-head" style="margin-top:16px"><div class="section-title">지출내역</div><button class="small-btn purple" onclick="addExpense()">＋ 지출 추가</button></div>
+      <div id="expense-list"></div>
+    </section>
+
+    <section id="tab-notes" class="tab-panel">
+      <div class="section-head"><div class="section-title">모임 메모</div></div>
+      <textarea id="note-area" class="note-area" placeholder="공지사항, 준비물, 예약내용 등을 자유롭게 적어두세요." oninput="saveNotes(this.value)"></textarea>
+      <div class="note-help">입력하는 즉시 자동 저장됩니다.</div>
+    </section>
+  </div>
+</div>
+
+<div id="settings-overlay" class="overlay" onclick="overlayClick(event)">
+  <div class="settings-box">
+    <h2 class="settings-title">⚙️ 관리</h2>
+    <button class="settings-menu-btn" onclick="startReorder()">↕ 모임 순서 변경</button>
+    <button class="settings-menu-btn" onclick="backupData()">🔐 암호화 백업</button>
+    <button class="settings-menu-btn" onclick="document.getElementById('restore-file').click()">📤 백업 복원</button>
+    <button class="settings-menu-btn" onclick="changePassword()">🔑 비밀번호 변경</button>
+    <button class="settings-menu-btn" onclick="changePasswordHint()">💡 비밀번호 힌트 설정/변경</button>
+    <div class="security-row">
+      <label for="auto-lock-select">⏱ 자동 잠금</label>
+      <select id="auto-lock-select" onchange="changeAutoLock(this.value)">
+        <option value="1">1분</option>
+        <option value="5">5분</option>
+        <option value="10">10분</option>
+        <option value="30">30분</option>
+      </select>
+    </div>
+    <div class="security-hint">일정 시간 동안 사용하지 않으면 자동으로 잠깁니다.</div>
+    <button class="settings-menu-btn lock-now" onclick="lockNow()">🔒 지금 잠그기</button>
+    <button id="cleanup-legacy-btn" class="settings-menu-btn warn" style="display:none" onclick="cleanupLegacyData()">🧹 예전 평문 데이터 삭제</button>
+    <button class="settings-close-btn" onclick="closeSettings()">닫기</button>
+    <input id="restore-file" type="file" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
+  </div>
+</div>
+
+
+<div id="lock-screen" class="lock-screen show">
+  <div class="lock-card">
+    <div class="lock-icon">🔐</div>
+    <h1 id="lock-title" class="lock-title">모임 종합관리 잠금</h1>
+    <div id="lock-desc" class="lock-desc">비밀번호를 입력하면 회원정보를 열 수 있습니다.</div>
+    <input id="lock-password" class="lock-input" type="password" inputmode="text" autocomplete="current-password" placeholder="비밀번호" onkeydown="lockEnter(event)">
+    <input id="lock-confirm" class="lock-input" type="password" inputmode="text" autocomplete="new-password" placeholder="비밀번호 다시 입력" onkeydown="lockEnter(event)" style="display:none">
+    <input id="lock-hint" class="lock-input" type="text" autocomplete="off" placeholder="비밀번호 힌트 (선택)" style="display:none">
+    <button id="lock-action" class="lock-primary" onclick="handleLockAction()">열기</button>
+    <button id="hint-button" class="lock-secondary" onclick="showPasswordHint()" style="display:none">💡 비밀번호 힌트 보기</button>
+    <div id="hint-display" class="hint-display"></div>
+    <div id="lock-error" class="lock-error"></div>
+    <div id="lock-note" class="lock-note"></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='groupManagerDataV1';
+const PHONEBOOK_KEY='phoneBookDataV3';
+const VAULT_KEY='groupManagerVaultV2';
+const AUTO_LOCK_KEY='groupManagerAutoLockMinutesV1';
+const HINT_KEY='groupManagerPasswordHintV1';
+const PBKDF2_ITERATIONS=250000;
+
+let appData={version:1,groups:[]};
+let currentGroupId='';
+let currentTab='members';
+let currentSearch='';
+let reorderMode=false;
+let cryptoKey=null;
+let vaultSalt=null;
+let saveChain=Promise.resolve();
+let lockMode='unlock';
+let pendingLegacyData=null;
+let pendingLegacySource='';
+let revealedPhones=new Set();
+let autoLockMinutes=Number(localStorage.getItem(AUTO_LOCK_KEY)||5);
+let lastActivity=Date.now();
+let autoLockTimer=null;
+
+function makeId(prefix='id'){
+  return prefix+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);
+}
+function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function toNumber(v){const n=Number(String(v).replace(/,/g,''));return Number.isFinite(n)?n:0}
+function money(v){return toNumber(v).toLocaleString('ko-KR')+'원'}
+function normalizeGroup(g){
+  g.id=g.id||makeId('g'); g.name=g.name||'새 모임'; g.desc=g.desc||'회원 모임';
+  g.members=Array.isArray(g.members)?g.members:[];
+  g.members.forEach(m=>{m.id=m.id||makeId('m');m.name=m.name||'';m.phone=m.phone||'';m.memo=m.memo||''});
+  g.meetings=Array.isArray(g.meetings)?g.meetings:[];
+  g.meetings.forEach(x=>{x.id=x.id||makeId('mt');x.date=x.date||'';x.time=x.time||'';x.title=x.title||'정기모임';x.place=x.place||'';x.attendance=(x.attendance&&typeof x.attendance==='object')?x.attendance:{}});
+  g.notes=g.notes||'';
+  g.finance=(g.finance&&typeof g.finance==='object')?g.finance:{};
+  g.finance.feeAmount=toNumber(g.finance.feeAmount);
+  g.finance.payments=(g.finance.payments&&typeof g.finance.payments==='object')?g.finance.payments:{};
+  g.finance.expenses=Array.isArray(g.finance.expenses)?g.finance.expenses:[];
+  g.finance.expenses.forEach(e=>{e.id=e.id||makeId('ex');e.date=e.date||'';e.item=e.item||'';e.amount=toNumber(e.amount)});
+  return g;
+}
+function normalizeData(d){
+  if(!d||typeof d!=='object') d={version:1,groups:[]};
+  d.version=1; d.groups=Array.isArray(d.groups)?d.groups:[]; d.groups=d.groups.map(normalizeGroup); return d;
+}
+function bytesToBase64(bytes){
+  let s=''; const arr=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);
+  for(let i=0;i<arr.length;i++)s+=String.fromCharCode(arr[i]);
+  return btoa(s);
+}
+function base64ToBytes(text){
+  const s=atob(text); const arr=new Uint8Array(s.length);
+  for(let i=0;i<s.length;i++)arr[i]=s.charCodeAt(i);
+  return arr;
+}
+async function deriveKey(password,salt,iterations=PBKDF2_ITERATIONS){
+  const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+}
+async function encryptText(text,key){
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const encrypted=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(text));
+  return {iv:bytesToBase64(iv),data:bytesToBase64(new Uint8Array(encrypted))};
+}
+async function decryptVault(vault,key){
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:base64ToBytes(vault.iv)},key,base64ToBytes(vault.data));
+  return new TextDecoder().decode(plain);
+}
+function legacyPhonebookToData(old){
+  const groups=Object.entries(old).map(([name,g])=>normalizeGroup({
+    id:makeId('g'),name,desc:g?.desc||'회원 모임',
+    members:Array.isArray(g?.members)?g.members.map(m=>({id:makeId('m'),name:m.name||'',phone:m.phone||'',memo:m.memo||''})):[],
+    meetings:[],notes:'',finance:{feeAmount:0,payments:{},expenses:[]}
+  }));
+  return {version:1,groups};
+}
+function findLegacyData(){
+  try{
+    const saved=localStorage.getItem(STORAGE_KEY);
+    if(saved)return {data:normalizeData(JSON.parse(saved)),source:'groupmanager'};
+  }catch(e){}
+  try{
+    const legacy=localStorage.getItem(PHONEBOOK_KEY);
+    if(legacy){
+      const old=JSON.parse(legacy);
+      if(old&&typeof old==='object'&&!Array.isArray(old))return {data:legacyPhonebookToData(old),source:'phonebook'};
+    }
+  }catch(e){}
+  return {data:{version:1,groups:[]},source:''};
+}
+function getVault(){
+  try{return JSON.parse(localStorage.getItem(VAULT_KEY)||'null')}catch(e){return null}
+}
+async function persistSnapshot(snapshot){
+  if(!cryptoKey||!vaultSalt)return;
+  const enc=await encryptText(snapshot,cryptoKey);
+  const vault={version:2,iterations:PBKDF2_ITERATIONS,salt:bytesToBase64(vaultSalt),iv:enc.iv,data:enc.data,updatedAt:new Date().toISOString()};
+  localStorage.setItem(VAULT_KEY,JSON.stringify(vault));
+}
+function saveData(){
+  if(!cryptoKey)return;
+  const snapshot=JSON.stringify(appData);
+  saveChain=saveChain.then(()=>persistSnapshot(snapshot)).catch(err=>console.error('암호화 저장 오류',err));
+}
+function currentGroup(){return appData.groups.find(g=>g.id===currentGroupId)}
+
+function showLockScreen(mode,message=''){
+  lockMode=mode;
+  const screen=document.getElementById('lock-screen');
+  const title=document.getElementById('lock-title');
+  const desc=document.getElementById('lock-desc');
+  const pw=document.getElementById('lock-password');
+  const confirmPw=document.getElementById('lock-confirm');
+  const hintInput=document.getElementById('lock-hint');
+  const hintButton=document.getElementById('hint-button');
+  const hintDisplay=document.getElementById('hint-display');
+  const action=document.getElementById('lock-action');
+  const note=document.getElementById('lock-note');
+  document.getElementById('lock-error').innerText='';
+  screen.classList.add('show');
+  document.getElementById('app-shell').classList.add('app-locked');
+  pw.value=''; confirmPw.value=''; hintInput.value='';
+  hintDisplay.style.display='none';
+  hintDisplay.innerText='';
+  if(mode==='setup'){
+    title.innerText='🔐 처음 비밀번호 설정';
+    desc.innerText=message||'회원정보를 암호화해서 저장할 비밀번호를 만들어주세요.';
+    pw.placeholder='새 비밀번호 (6자 이상)';
+    pw.autocomplete='new-password';
+    confirmPw.style.display='block';
+    hintInput.style.display='block';
+    hintButton.style.display='none';
+    action.innerText='보안 저장 시작';
+    note.innerText='힌트에는 실제 비밀번호를 그대로 적지 마세요. 비밀번호를 잊으면 암호화된 자료는 복구할 수 없습니다.';
+  }else{
+    title.innerText='🔐 모임 종합관리';
+    desc.innerText=message||'비밀번호를 입력하면 회원정보를 열 수 있습니다.';
+    pw.placeholder='비밀번호';
+    pw.autocomplete='current-password';
+    confirmPw.style.display='none';
+    hintInput.style.display='none';
+    const hint=localStorage.getItem(HINT_KEY)||'';
+    hintButton.style.display=hint?'block':'none';
+    action.innerText='열기';
+    note.innerText='회원정보는 이 기기의 브라우저에 암호화되어 저장됩니다.';
+  }
+  setTimeout(()=>pw.focus(),120);
+}
+function hideLockScreen(){
+  document.getElementById('lock-screen').classList.remove('show');
+  document.getElementById('app-shell').classList.remove('app-locked');
+  document.getElementById('lock-error').innerText='';
+  resetAutoLock();
+}
+function lockEnter(e){if(e.key==='Enter')handleLockAction()}
+async function handleLockAction(){
+  const pw=document.getElementById('lock-password').value;
+  const err=document.getElementById('lock-error');
+  err.innerText='';
+  if(lockMode==='setup'){
+    const confirmPw=document.getElementById('lock-confirm').value;
+    const hint=(document.getElementById('lock-hint').value||'').trim();
+    if(pw.length<6){err.innerText='비밀번호는 6자 이상으로 만들어주세요.';return}
+    if(pw!==confirmPw){err.innerText='두 비밀번호가 서로 다릅니다.';return}
+    try{
+      vaultSalt=crypto.getRandomValues(new Uint8Array(16));
+      cryptoKey=await deriveKey(pw,vaultSalt);
+      appData=normalizeData(pendingLegacyData||{version:1,groups:[]});
+      await persistSnapshot(JSON.stringify(appData));
+      if(hint)localStorage.setItem(HINT_KEY,hint);
+      else localStorage.removeItem(HINT_KEY);
+      if(pendingLegacySource==='groupmanager')localStorage.removeItem(STORAGE_KEY);
+      pendingLegacyData=null;
+      loadGroupList();
+      hideLockScreen();
+      if(pendingLegacySource==='phonebook')setTimeout(()=>alert('기존 전화번호부 자료를 안전한 앱으로 가져왔습니다. 다만 예전 phonebook.html의 자료는 아직 평문으로 남아 있을 수 있습니다. 새 앱 확인 후 ⚙️ 관리에서 “예전 평문 데이터 삭제”를 선택하면 더 안전합니다.'),250);
+    }catch(e){err.innerText='보안 설정 중 오류가 발생했습니다.'}
+  }else{
+    const vault=getVault();
+    if(!vault){showLockScreen('setup');return}
+    try{
+      const salt=base64ToBytes(vault.salt);
+      const key=await deriveKey(pw,salt,vault.iterations||PBKDF2_ITERATIONS);
+      const text=await decryptVault(vault,key);
+      appData=normalizeData(JSON.parse(text));
+      cryptoKey=key; vaultSalt=salt;
+      revealedPhones.clear();
+      loadGroupList();
+      hideLockScreen();
+    }catch(e){err.innerText='비밀번호가 맞지 않습니다.'}
+  }
+}
+async function bootstrapSecurity(){
+  if(!window.crypto||!crypto.subtle){
+    alert('이 브라우저에서는 보안 암호화를 사용할 수 없습니다. 최신 삼성 인터넷 또는 크롬에서 열어주세요.');
+    return;
+  }
+  const vault=getVault();
+  if(vault){showLockScreen('unlock');return}
+  const legacy=findLegacyData();
+  pendingLegacyData=legacy.data;
+  pendingLegacySource=legacy.source;
+  const msg=legacy.data.groups.length?'기존 모임·회원 자료를 발견했습니다. 새 비밀번호를 설정하면 기존 자료를 암호화해서 옮깁니다.':'회원정보를 암호화해서 저장할 비밀번호를 만들어주세요.';
+  showLockScreen('setup',msg);
+}
+function lockNow(){
+  closeSettings();
+  revealedPhones.clear();
+  cryptoKey=null; vaultSalt=null;
+  appData={version:1,groups:[]};
+  currentGroupId=''; currentSearch=''; reorderMode=false;
+  document.getElementById('page-detail').classList.remove('active');
+  document.getElementById('page-main').classList.add('active');
+  showLockScreen('unlock');
+}
+function resetAutoLock(){
+  if(!cryptoKey)return;
+  lastActivity=Date.now();
+  clearTimeout(autoLockTimer);
+  autoLockTimer=setTimeout(()=>{if(cryptoKey)lockNow()},autoLockMinutes*60*1000);
+}
+['click','touchstart','keydown','input'].forEach(evt=>document.addEventListener(evt,()=>{if(cryptoKey)resetAutoLock()},{passive:true}));
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'&&cryptoKey)lastActivity=Date.now();
+  if(document.visibilityState==='visible'&&cryptoKey&&Date.now()-lastActivity>=autoLockMinutes*60*1000)lockNow();
+});
+
+
+/* 메인 */
+function loadGroupList(){
+  const list=document.getElementById('group-list'); list.innerHTML='';
+  if(!appData.groups.length){list.innerHTML='<div class="empty">등록된 모임이 없습니다.<br><br>아래에서 새로운 모임을 추가해주세요.</div>';return}
+  appData.groups.forEach((g,index)=>{
+    const card=document.createElement('div'); card.className='group-card'+(reorderMode?' reorder-mode':'');
+    card.innerHTML=`<div class="group-main">
+      <button class="group-open"><div class="group-info"><div class="group-name"><span class="group-icon icon-${(index%5)+1}">👥</span><span>${esc(g.name)}</span></div><div class="group-desc">${esc(g.desc)} · 회원 ${g.members.length}명</div></div></button>
+      <button class="menu-btn">⋮</button>
+      <div class="reorder-panel"><button class="move-btn up" ${index===0?'disabled':''}>▲</button><button class="move-btn down" ${index===appData.groups.length-1?'disabled':''}>▼</button></div>
+    </div>
+    <div class="group-menu"><button class="rename">✏️ 이름 변경</button><button class="redesc">📝 설명 변경</button><button class="delete-menu del">🗑 모임 삭제</button></div>`;
+    const menu=card.querySelector('.group-menu');
+    card.querySelector('.group-open').onclick=()=>{if(!reorderMode){closeAllMenus();openGroup(g.id)}};
+    card.querySelector('.menu-btn').onclick=(e)=>{e.stopPropagation();if(reorderMode)return;const is=menu.classList.contains('show');closeAllMenus();if(!is)menu.classList.add('show')};
+    card.querySelector('.rename').onclick=()=>{closeAllMenus();renameGroup(g.id)};
+    card.querySelector('.redesc').onclick=()=>{closeAllMenus();editGroupDescription(g.id)};
+    card.querySelector('.del').onclick=()=>{closeAllMenus();deleteGroup(g.id)};
+    card.querySelector('.up').onclick=()=>moveGroup(index,-1);
+    card.querySelector('.down').onclick=()=>moveGroup(index,1);
+    list.appendChild(card);
+  });
+}
+function addGroup(){
+  const name=prompt('새로운 모임 이름을 입력해주세요.'); if(name===null)return; const n=name.trim(); if(!n)return alert('모임 이름을 입력해주세요.');
+  if(appData.groups.some(g=>g.name===n))return alert('이미 같은 이름의 모임이 있습니다.');
+  const desc=prompt('모임 설명을 입력해주세요.');
+  appData.groups.push(normalizeGroup({id:makeId('g'),name:n,desc:desc&&desc.trim()?desc.trim():'회원 모임',members:[],meetings:[],notes:'',finance:{feeAmount:0,payments:{},expenses:[]}}));
+  saveData(); loadGroupList();
+}
+function renameGroup(id){const g=appData.groups.find(x=>x.id===id);if(!g)return;const v=prompt('새로운 모임 이름을 입력해주세요.',g.name);if(v===null)return;const n=v.trim();if(!n)return;if(appData.groups.some(x=>x.id!==id&&x.name===n))return alert('이미 같은 이름의 모임이 있습니다.');g.name=n;saveData();loadGroupList()}
+function editGroupDescription(id){const g=appData.groups.find(x=>x.id===id);if(!g)return;const v=prompt('모임 설명을 입력해주세요.',g.desc||'');if(v===null)return;g.desc=v.trim()||'회원 모임';saveData();loadGroupList()}
+function deleteGroup(id){const i=appData.groups.findIndex(x=>x.id===id);if(i<0)return;const g=appData.groups[i];if(!confirm(`${g.name} 모임과 관련 기록을 모두 삭제하시겠습니까?`))return;if(!confirm('정말 삭제하시겠습니까?'))return;appData.groups.splice(i,1);saveData();loadGroupList()}
+function moveGroup(i,d){const n=i+d;if(n<0||n>=appData.groups.length)return;[appData.groups[i],appData.groups[n]]=[appData.groups[n],appData.groups[i]];saveData();loadGroupList()}
+function closeAllMenus(){document.querySelectorAll('.group-menu').forEach(x=>x.classList.remove('show'))}
+document.addEventListener('click',e=>{if(!e.target.closest('.group-card'))closeAllMenus()});
+
+/* 상세 */
+function openGroup(id){currentGroupId=id;currentSearch='';currentTab='members';document.getElementById('page-main').classList.remove('active');document.getElementById('page-detail').classList.add('active');document.getElementById('detail-title').innerText=currentGroup().name;document.getElementById('member-search').value='';document.getElementById('clear-search').style.display='none';openTab('members');window.scrollTo({top:0,behavior:'smooth'})}
+function goBack(){document.getElementById('page-detail').classList.remove('active');document.getElementById('page-main').classList.add('active');currentGroupId='';loadGroupList();window.scrollTo({top:0,behavior:'smooth'})}
+function openTab(tab){currentTab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');if(tab==='members')renderMembers();if(tab==='meetings')renderMeetings();if(tab==='attendance')renderAttendanceTab();if(tab==='finance')renderFinance();if(tab==='notes')renderNotes()}
+
+/* 회원 */
+function searchMembers(){currentSearch=document.getElementById('member-search').value;document.getElementById('clear-search').style.display=currentSearch.trim()?'block':'none';renderMembers()}
+function clearMemberSearch(){document.getElementById('member-search').value='';currentSearch='';document.getElementById('clear-search').style.display='none';renderMembers()}
+function maskPhone(phone){
+  const p=String(phone||'');
+  if(!p)return '';
+  const digits=p.replace(/\D/g,'');
+  if(digits.length>=8){
+    const head=digits.slice(0,3), tail=digits.slice(-4);
+    return head+'-****-'+tail;
+  }
+  return p.length>4?p.slice(0,2)+'****'+p.slice(-2):'****';
+}
+function togglePhoneReveal(memberId){
+  if(revealedPhones.has(memberId))revealedPhones.delete(memberId);else revealedPhones.add(memberId);
+  renderMembers();
+}
+function renderMembers(){
+  const g=currentGroup();if(!g)return;const list=document.getElementById('member-list');list.innerHTML='';const key=currentSearch.trim().toLowerCase();
+  const rows=g.members.map((m,i)=>({m,i})).filter(x=>!key||`${x.m.name} ${x.m.phone} ${x.m.memo}`.toLowerCase().includes(key));
+  document.getElementById('search-result').innerText=key?`검색 결과 ${rows.length}명`:`전체 회원 ${g.members.length}명`;
+  if(!rows.length){list.innerHTML=`<div class="empty">${key?'🔍 검색된 회원이 없습니다.':'등록된 회원이 없습니다.'}</div>`;return}
+  rows.forEach(({m,i})=>{
+    const revealed=revealedPhones.has(m.id);
+    const card=document.createElement('div');card.className='member-card';
+    card.innerHTML=`<div class="member-top"><input value="${esc(m.name)}" placeholder="이름"><div class="phone-wrap"><input class="phone-input" type="tel" value="${esc(revealed?m.phone:maskPhone(m.phone))}" placeholder="010-0000-0000" ${revealed?'':'readonly'}><button class="phone-reveal-btn">${revealed?'🙈 가리기':'👁 번호'}</button></div></div><input class="memo-input" value="${esc(m.memo)}" placeholder="메모"><div class="member-actions"><button class="action-btn call-btn">📞 전화</button><button class="action-btn sms-btn">💬 문자</button><button class="action-btn delete-btn">🗑 삭제</button></div>`;
+    const nameInput=card.querySelector('.member-top > input');
+    const phoneInput=card.querySelector('.phone-input');
+    const memoInput=card.querySelector('.memo-input');
+    nameInput.oninput=e=>updateMember(i,'name',e.target.value);
+    if(revealed)phoneInput.oninput=e=>updateMember(i,'phone',e.target.value);
+    memoInput.oninput=e=>updateMember(i,'memo',e.target.value);
+    card.querySelector('.phone-reveal-btn').onclick=()=>togglePhoneReveal(m.id);
+    card.querySelector('.call-btn').onclick=()=>callPhone(i);card.querySelector('.sms-btn').onclick=()=>sendSMS(i);card.querySelector('.delete-btn').onclick=()=>deleteMember(i);
+    list.appendChild(card);
+  });
+}
+function addMember(){const g=currentGroup();if(!g)return;g.members.push({id:makeId('m'),name:'',phone:'',memo:''});saveData();renderMembers();}
+function updateMember(i,f,v){const g=currentGroup();if(!g||!g.members[i])return;g.members[i][f]=v;saveData()}
+function deleteMember(i){const g=currentGroup();if(!g||!g.members[i])return;const m=g.members[i];if(!confirm(`${m.name||'이 회원'}을 삭제하시겠습니까?`))return;delete g.finance.payments[m.id];g.meetings.forEach(mt=>{delete mt.attendance[m.id]});g.members.splice(i,1);saveData();renderMembers()}
+function cleanPhone(p){return String(p||'').replace(/[^0-9+]/g,'')}
+function callPhone(i){const p=cleanPhone(currentGroup().members[i]?.phone);if(!p)return alert('전화번호를 먼저 입력해주세요.');location.href='tel:'+p}
+function sendSMS(i){const p=cleanPhone(currentGroup().members[i]?.phone);if(!p)return alert('전화번호를 먼저 입력해주세요.');location.href='sms:'+p}
+
+/* 일정 */
+function meetingSort(a,b){return `${a.date}T${a.time||'00:00'}`.localeCompare(`${b.date}T${b.time||'00:00'}`)}
+function addMeeting(){const g=currentGroup();if(!g)return;const date=prompt('모임 날짜를 입력해주세요.\n예: 2026-10-03');if(date===null)return;const d=date.trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return alert('날짜를 2026-10-03 형식으로 입력해주세요.');const time=prompt('시간을 입력해주세요.\n예: 09:00','09:00');if(time===null)return;const title=prompt('일정 제목을 입력해주세요.','정기모임');if(title===null)return;const place=prompt('장소를 입력해주세요.','');if(place===null)return;g.meetings.push({id:makeId('mt'),date:d,time:time.trim(),title:title.trim()||'정기모임',place:place.trim(),attendance:{}});g.meetings.sort(meetingSort);saveData();renderMeetings()}
+function editMeeting(id){const g=currentGroup();const mt=g?.meetings.find(x=>x.id===id);if(!mt)return;const d=prompt('날짜',mt.date);if(d===null)return;const t=prompt('시간',mt.time);if(t===null)return;const title=prompt('제목',mt.title);if(title===null)return;const p=prompt('장소',mt.place);if(p===null)return;mt.date=d.trim();mt.time=t.trim();mt.title=title.trim()||'정기모임';mt.place=p.trim();g.meetings.sort(meetingSort);saveData();renderMeetings()}
+function deleteMeeting(id){const g=currentGroup();const i=g?.meetings.findIndex(x=>x.id===id);if(i<0)return;if(!confirm('이 일정을 삭제하시겠습니까?'))return;g.meetings.splice(i,1);saveData();renderMeetings()}
+function renderMeetings(){const g=currentGroup();if(!g)return;g.meetings.sort(meetingSort);const now=new Date();const today=now.toISOString().slice(0,10);const upcoming=g.meetings.find(x=>x.date>=today);document.getElementById('next-meeting').innerHTML=upcoming?`<div class="meeting-next"><strong>다음 모임</strong><div style="margin-top:6px">${esc(upcoming.date)} ${esc(upcoming.time)} · ${esc(upcoming.title)}</div><div class="meeting-meta">${esc(upcoming.place||'장소 미정')}</div></div>`:'';const list=document.getElementById('meeting-list');if(!g.meetings.length){list.innerHTML='<div class="empty">등록된 일정이 없습니다.</div>';return}list.innerHTML='';g.meetings.forEach(mt=>{const d=document.createElement('div');d.className='meeting-card';d.innerHTML=`<div class="meeting-date">${esc(mt.date)} ${esc(mt.time)}</div><div class="meeting-meta">${esc(mt.title)}${mt.place?' · '+esc(mt.place):''}</div><div class="meeting-actions"><button class="mini-action edit">✏️ 수정</button><button class="mini-action danger del">🗑 삭제</button></div>`;d.querySelector('.edit').onclick=()=>editMeeting(mt.id);d.querySelector('.del').onclick=()=>deleteMeeting(mt.id);list.appendChild(d)})}
+
+/* 출석 */
+function renderAttendanceTab(){const g=currentGroup();if(!g)return;const sel=document.getElementById('attendance-meeting');const old=sel.value;const meetings=[...g.meetings].sort((a,b)=>meetingSort(b,a));if(!meetings.length){sel.innerHTML='<option value="">등록된 일정이 없습니다</option>';document.getElementById('attendance-list').innerHTML='<div class="empty">먼저 일정에서 모임 날짜를 추가해주세요.</div>';document.getElementById('attendance-summary').innerText='';return}sel.innerHTML=meetings.map(m=>`<option value="${m.id}">${esc(m.date)} ${esc(m.title)}</option>`).join('');if(meetings.some(m=>m.id===old))sel.value=old;renderAttendance()}
+function renderAttendance(){const g=currentGroup();if(!g)return;const id=document.getElementById('attendance-meeting').value;const mt=g.meetings.find(x=>x.id===id);const list=document.getElementById('attendance-list');if(!mt){list.innerHTML='';return}let present=0,absent=0,unknown=0;list.innerHTML='';if(!g.members.length){list.innerHTML='<div class="empty">등록된 회원이 없습니다.</div>';document.getElementById('attendance-summary').innerText='';return}g.members.forEach(m=>{const s=mt.attendance[m.id]||'unknown';if(s==='present')present++;else if(s==='absent')absent++;else unknown++;const row=document.createElement('div');row.className='attendance-row';row.innerHTML=`<div class="attendance-name">${esc(m.name||'이름 없음')}</div><button class="status-btn ${s==='present'?'status-present':s==='absent'?'status-absent':'status-unknown'}">${s==='present'?'참석':s==='absent'?'불참':'미정'}</button>`;row.querySelector('button').onclick=()=>cycleAttendance(mt.id,m.id);list.appendChild(row)});document.getElementById('attendance-summary').innerText=`참석 ${present}명 · 불참 ${absent}명 · 미정 ${unknown}명`}
+function cycleAttendance(meetingId,memberId){const g=currentGroup();const mt=g?.meetings.find(x=>x.id===meetingId);if(!mt)return;const cur=mt.attendance[memberId]||'unknown';mt.attendance[memberId]=cur==='unknown'?'present':cur==='present'?'absent':'unknown';saveData();renderAttendance()}
+
+/* 회비 */
+function ensurePayment(member){const g=currentGroup();if(!g.finance.payments[member.id])g.finance.payments[member.id]={paid:false,amount:g.finance.feeAmount||0};return g.finance.payments[member.id]}
+function changeFeeAmount(v){const g=currentGroup();g.finance.feeAmount=toNumber(v);g.members.forEach(m=>{const p=ensurePayment(m);if(!p.paid||!p.amount)p.amount=g.finance.feeAmount});saveData();renderFinance()}
+function togglePaid(memberId){const g=currentGroup();const m=g.members.find(x=>x.id===memberId);if(!m)return;const p=ensurePayment(m);p.paid=!p.paid;if(p.paid&&!p.amount)p.amount=g.finance.feeAmount;saveData();renderFinance()}
+function changePayment(memberId,v){const g=currentGroup();const m=g.members.find(x=>x.id===memberId);if(!m)return;const p=ensurePayment(m);p.amount=toNumber(v);saveData();renderFinanceSummary()}
+function financeTotals(){const g=currentGroup();let income=0;g.members.forEach(m=>{const p=ensurePayment(m);if(p.paid)income+=toNumber(p.amount)});const expense=g.finance.expenses.reduce((s,e)=>s+toNumber(e.amount),0);return {income,expense,balance:income-expense}}
+function renderFinanceSummary(){const t=financeTotals();document.getElementById('finance-summary').innerHTML=`<div class="summary-box"><div class="summary-label">납부액</div><div class="summary-value">${money(t.income)}</div></div><div class="summary-box"><div class="summary-label">지출</div><div class="summary-value">${money(t.expense)}</div></div><div class="summary-box"><div class="summary-label">잔액</div><div class="summary-value">${money(t.balance)}</div></div>`}
+function renderFinance(){const g=currentGroup();if(!g)return;document.getElementById('fee-amount').value=g.finance.feeAmount||'';renderFinanceSummary();const list=document.getElementById('payment-list');if(!g.members.length){list.innerHTML='<div class="empty">등록된 회원이 없습니다.</div>'}else{list.innerHTML='';g.members.forEach(m=>{const p=ensurePayment(m);const row=document.createElement('div');row.className='payment-row';row.innerHTML=`<div>${esc(m.name||'이름 없음')}</div><input type="number" min="0" step="1000" value="${toNumber(p.amount)}"><button class="pay-toggle ${p.paid?'paid':'unpaid'}">${p.paid?'납부':'미납'}</button>`;row.querySelector('input').oninput=e=>changePayment(m.id,e.target.value);row.querySelector('button').onclick=()=>togglePaid(m.id);list.appendChild(row)})}renderExpenses()}
+function addExpense(){const g=currentGroup();const date=prompt('지출 날짜를 입력해주세요.\n예: 2026-10-03',new Date().toISOString().slice(0,10));if(date===null)return;const item=prompt('지출 내용을 입력해주세요.');if(item===null)return;const amount=prompt('지출 금액을 입력해주세요.\n예: 35000');if(amount===null)return;g.finance.expenses.push({id:makeId('ex'),date:date.trim(),item:item.trim(),amount:toNumber(amount)});saveData();renderFinance()}
+function deleteExpense(id){const g=currentGroup();const i=g.finance.expenses.findIndex(e=>e.id===id);if(i<0)return;if(!confirm('이 지출내역을 삭제하시겠습니까?'))return;g.finance.expenses.splice(i,1);saveData();renderFinance()}
+function renderExpenses(){const g=currentGroup();const list=document.getElementById('expense-list');if(!g.finance.expenses.length){list.innerHTML='<div class="empty">등록된 지출이 없습니다.</div>';return}list.innerHTML='';[...g.finance.expenses].sort((a,b)=>String(b.date).localeCompare(String(a.date))).forEach(e=>{const row=document.createElement('div');row.className='expense-card';row.innerHTML=`<div>${esc(e.date)}</div><div>${esc(e.item)}</div><div style="text-align:right">${money(e.amount)}</div><button class="expense-del">×</button>`;row.querySelector('button').onclick=()=>deleteExpense(e.id);list.appendChild(row)})}
+
+/* 메모 */
+function renderNotes(){const g=currentGroup();document.getElementById('note-area').value=g?.notes||''}
+function saveNotes(v){const g=currentGroup();if(!g)return;g.notes=v;saveData()}
+
+function updateSecurityUi(){
+  const sel=document.getElementById('auto-lock-select'); if(sel)sel.value=String(autoLockMinutes);
+  const cleanup=document.getElementById('cleanup-legacy-btn');
+  if(cleanup)cleanup.style.display=(localStorage.getItem(STORAGE_KEY)||localStorage.getItem(PHONEBOOK_KEY))?'block':'none';
+}
+function changeAutoLock(v){
+  autoLockMinutes=[1,5,10,30].includes(Number(v))?Number(v):5;
+  localStorage.setItem(AUTO_LOCK_KEY,String(autoLockMinutes));
+  resetAutoLock();
+}
+async function changePassword(){
+  closeSettings();
+  const vault=getVault(); if(!vault)return;
+  const oldPw=prompt('현재 비밀번호를 입력해주세요.'); if(oldPw===null)return;
+  const newPw=prompt('새 비밀번호를 입력해주세요.\n6자 이상으로 만들어주세요.'); if(newPw===null)return;
+  if(newPw.length<6)return alert('새 비밀번호는 6자 이상이어야 합니다.');
+  const again=prompt('새 비밀번호를 한 번 더 입력해주세요.'); if(again===null)return;
+  if(newPw!==again)return alert('새 비밀번호가 서로 다릅니다.');
+  try{
+    const oldSalt=base64ToBytes(vault.salt);
+    const oldKey=await deriveKey(oldPw,oldSalt,vault.iterations||PBKDF2_ITERATIONS);
+    await decryptVault(vault,oldKey);
+    const newSalt=crypto.getRandomValues(new Uint8Array(16));
+    const newKey=await deriveKey(newPw,newSalt);
+    cryptoKey=newKey;vaultSalt=newSalt;
+    await persistSnapshot(JSON.stringify(appData));
+    alert('비밀번호가 변경되었습니다. 이전 암호화 백업은 이전 비밀번호로 열어야 합니다.');
+    resetAutoLock();
+  }catch(e){alert('현재 비밀번호가 맞지 않습니다.')}
+}
+function showPasswordHint(){
+  const hint=localStorage.getItem(HINT_KEY)||'';
+  const box=document.getElementById('hint-display');
+  if(!hint){
+    box.style.display='block';
+    box.innerText='저장된 힌트가 없습니다.';
+    return;
+  }
+  box.style.display='block';
+  box.innerText='힌트: '+hint;
+}
+function changePasswordHint(){
+  closeSettings();
+  const current=localStorage.getItem(HINT_KEY)||'';
+  const v=prompt('비밀번호를 기억하는 데 도움이 될 힌트를 입력해주세요.\n\n※ 실제 비밀번호 자체는 적지 마세요.\n※ 빈칸으로 저장하면 힌트가 삭제됩니다.',current);
+  if(v===null)return;
+  const hint=v.trim();
+  if(hint)localStorage.setItem(HINT_KEY,hint);
+  else localStorage.removeItem(HINT_KEY);
+  alert(hint?'비밀번호 힌트를 저장했습니다.':'비밀번호 힌트를 삭제했습니다.');
+}
+function cleanupLegacyData(){
+  closeSettings();
+  if(!confirm('예전 전화번호부와 이전 평문 저장자료를 이 브라우저에서 삭제하시겠습니까?\n\n새 보안 앱의 암호화 자료는 삭제되지 않습니다.'))return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(PHONEBOOK_KEY);
+  alert('예전 평문 자료를 삭제했습니다.');
+}
+
+/* 설정/순서/백업 */
+function openSettings(){closeAllMenus();updateSecurityUi();document.getElementById('settings-overlay').classList.add('show')}
+function closeSettings(){document.getElementById('settings-overlay').classList.remove('show')}
+function overlayClick(e){if(e.target.id==='settings-overlay')closeSettings()}
+function startReorder(){closeSettings();reorderMode=true;const h=document.getElementById('reorder-help');h.classList.add('show');h.innerHTML='▲ ▼ 버튼으로 원하는 순서로 이동하세요.<br><button onclick="finishReorder()" style="margin-top:8px;border:0;border-radius:7px;padding:7px 14px;background:#16a34a;color:#fff;font-weight:bold">✓ 순서 변경 완료</button>';loadGroupList()}
+function finishReorder(){reorderMode=false;const h=document.getElementById('reorder-help');h.classList.remove('show');h.innerHTML='';loadGroupList()}
+function backupData(){
+  closeSettings();
+  const vault=getVault();
+  if(!vault)return alert('암호화된 저장자료가 없습니다.');
+  const backup={app:'모임 종합관리 보안백업',version:3,savedAt:new Date().toISOString(),vault,hint:localStorage.getItem(HINT_KEY)||''};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  a.download='모임종합관리_암호화백업_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function restoreData(event){
+  const file=event.target.files[0];if(!file)return;closeSettings();const r=new FileReader();
+  r.onload=async()=>{
+    try{
+      const parsed=JSON.parse(r.result);
+      if(parsed?.vault?.salt&&parsed?.vault?.iv&&parsed?.vault?.data){
+        if(!confirm('암호화 백업으로 현재 자료를 바꾸시겠습니까?'))return;
+        localStorage.setItem(VAULT_KEY,JSON.stringify(parsed.vault));
+        if(typeof parsed.hint==='string'&&parsed.hint.trim())localStorage.setItem(HINT_KEY,parsed.hint.trim());
+        else localStorage.removeItem(HINT_KEY);
+        alert('백업을 가져왔습니다. 이 백업을 만들 때 사용한 비밀번호로 다시 열어주세요.');
+        lockNow();
+        return;
+      }
+      let data=parsed?.data||parsed;
+      if(data?.groups&&Array.isArray(data.groups))data=normalizeData(data);
+      else if(data&&typeof data==='object'&&!Array.isArray(data))data=legacyPhonebookToData(data);
+      else throw new Error();
+      if(!cryptoKey)throw new Error();
+      if(!confirm('이전 형식의 백업을 현재 자료로 복원하고 암호화해서 저장하시겠습니까?'))return;
+      appData=data;await persistSnapshot(JSON.stringify(appData));loadGroupList();alert('복원 후 암호화 저장했습니다.');
+    }catch(e){alert('올바른 백업 파일이 아니거나 복원할 수 없습니다.')}finally{event.target.value=''}
+  };
+  r.readAsText(file);
+}
+
+
+bootstrapSecurity();
+</script>
+</body>
+</html>
